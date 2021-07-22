@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EFCore.NamingConventions" Version="5.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Npgsql" Version="5.0.7" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Contestor.BpmEngine\Contestor.BpmEngine.csproj" />
+    <ProjectReference Include="..\Contestor.Data\Contestor.Data.csproj" />
+    <ProjectReference Include="..\Contestor.Migrations.PostgreSql\Contestor.Migrations.PostgreSql.csproj" />
+    <ProjectReference Include="..\Contestor.Service\Contestor.Service.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,63 @@
+﻿@page "/AddContest"
+@using Contestor.Service.Contract
+@using Contestor.Data.Contract.Models
+@using Contestor.BpmEngine.Contract
+@inject IContestService contestService
+@inject NavigationManager NavigationManager
+
+<h3>Add Contest</h3>
+<hr />
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="Title" class="control-label">Title</label>
+                <input form="Title" class="form-control" @bind="@obj.Title" />
+            </div>
+            <div class="form-group">
+                <label for="Description" class="control-label">Description</label>
+                <input form="Description" class="form-control" @bind="@obj.Description" />
+            </div>
+            <div class="form-group">
+                <label for="ProcessKey" class="control-label"></label>
+                <select @bind="@obj.ProcessKey" class="form-control">
+                    <option value="">Select Process</option>
+                    @if(ProcessesDict != null)
+                    @foreach (var process in ProcessesDict)
+                    {
+                        <option value="@process.Key">@process.Value</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@CreateContest" value="Save" />
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+    Dictionary<string,string> ProcessesDict;
+    protected override async Task OnInitializedAsync()
+    {
+        ProcessesDict = await contestService.GetProcessesDictionary();
+    }
+
+    ContestModel obj = new ContestModel();
+    protected async void CreateContest()
+    {
+        await contestService.Create(obj);
+        NavigationManager.NavigateTo("Contests");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("Contests");
+    }
+}

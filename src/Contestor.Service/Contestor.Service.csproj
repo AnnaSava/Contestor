@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Contestor.BpmEngine\Contestor.BpmEngine.csproj" />
+    <ProjectReference Include="..\Contestor.Data\Contestor.Data.csproj" />
+  </ItemGroup>
+
+</Project>
