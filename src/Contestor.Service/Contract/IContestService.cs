@@ -11,6 +11,12 @@ namespace Contestor.Service.Contract
     {
         Task<ContestModel> Create(ContestModel model);
 
+        Task<ContestModel> GetOne(long id);
+
+        Task<IEnumerable<ContestModel>> GetAll(int page, int count);
+
         Task<Dictionary<string, string>> GetProcessesDictionary();
+
+        Task<string> StartContestProcess(long contestId);
     }
 }

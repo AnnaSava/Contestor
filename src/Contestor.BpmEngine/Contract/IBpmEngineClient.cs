@@ -8,8 +8,10 @@ namespace Contestor.BpmEngine.Contract
 {
     public interface IBpmEngineClient
     {
-        Task<IEnumerable<BusinessProcessModel>> GetLatestVersionProcesses();
+        Task<IEnumerable<ProcessModel>> GetLatestVersionProcesses();
 
-        Task<BusinessProcessModel> GetProcessById(string processId);
+        Task<ProcessModel> GetProcessById(string processId);
+
+        Task<string> StartProcess(StartProcessModel startProcessModel);
     }
 }

@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace Contestor.BpmEngine.Contract
 {
-    public class BusinessProcessModel
+    public class StartProcessModel
     {
-        public string Id { get; set; }
+        public string ProcessId { get; set; }
 
-        public string Name { get; set; }
-
-        public string Version { get; set; }
+        public string BusinessKey { get; set; }
     }
 }

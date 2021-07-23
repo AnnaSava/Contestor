@@ -1,7 +1,8 @@
 ﻿@page "/contests"
-@using Contestor.Data.Contract.Interfaces
+@using Contestor.Service.Contract
 @using Contestor.Data.Contract.Models
-@inject IContestDalService contestService
+@inject IContestService contestService
+@inject NavigationManager NavigationManager
 
 <h3>Contests</h3>
 
@@ -23,7 +24,9 @@ else
                 <th>Title</th>
                 <th>Description</th>
                 <th>ProcessKey</th>
-                <th>Action</th>
+                <th></th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -38,8 +41,15 @@ else
                         <a class="nav-link" href="EditContest/@contest.Id">
                             <span class="oi oi-pencil" aria-hidden="true">Edit</span>
                         </a>
+                    </td>
+                    <td>
                         <a class="nav-link" href="Delete/@contest.Id">
                             <span class="oi oi-trash" aria-hidden="true">Delete</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="nav-link" href="Start/@contest.Id">
+                            <span class="oi oi-trash" aria-hidden="true">Start</span>
                         </a>
                     </td>
                 </tr>
