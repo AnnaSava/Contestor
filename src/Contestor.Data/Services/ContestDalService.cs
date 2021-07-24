@@ -28,6 +28,16 @@ namespace Contestor.Data.Services
             return _mapper.Map<ContestModel>(entity);
         }
 
+        public async Task<long> SetStatus(long contestId, string status)
+        {
+            var entity = await _dbContext.Contests.FirstOrDefaultAsync(m => m.Id == contestId);
+            if (entity == null) throw new Exception($"Entity {contestId} not found");
+
+            entity.Status = status;
+            await _dbContext.SaveChangesAsync();
+            return entity.Id;
+        }
+
         public async Task<ContestModel> GetOne(long id)
         {
             var entity = await _dbContext.Contests

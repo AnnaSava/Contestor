@@ -23,7 +23,15 @@ namespace Contestor.Service.Services
 
         public async Task<ContestModel> Create(ContestModel model)
         {
+            var process = await _bpmEngineService.GetProcessById(model.ProcessKey);
+            model.ProcessName = process?.Name;
+
             return await _contestDalService.Create(model);
+        }
+
+        public async Task SetFinishedStatus(long contestId)
+        {
+            await _contestDalService.SetStatus(contestId, "finished");
         }
 
         public async Task<ContestModel> GetOne(long id)
@@ -48,7 +56,9 @@ namespace Contestor.Service.Services
 
             var startProcessModel = new StartProcessModel { ProcessId = contest.ProcessKey, BusinessKey = contest.Id.ToString() };
 
-            return await _bpmEngineService.StartProcess(startProcessModel);
+            var process = await _bpmEngineService.StartProcess(startProcessModel);
+            await _contestDalService.SetStatus(contestId, "open");
+            return process;
         }
     }
 }

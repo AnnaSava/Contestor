@@ -23,7 +23,8 @@ else
                 <th>Id</th>
                 <th>Title</th>
                 <th>Description</th>
-                <th>ProcessKey</th>
+                <th>ProcessName</th>
+                <th>Status</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -36,7 +37,8 @@ else
                     <td>@contest.Id</td>
                     <td>@contest.Title</td>
                     <td>@contest.Description</td>
-                    <td>@contest.ProcessKey</td>
+                    <td>@contest.ProcessName</td>
+                    <td>@contest.Status</td>
                     <td>
                         <a class="nav-link" href="EditContest/@contest.Id">
                             <span class="oi oi-pencil" aria-hidden="true">Edit</span>
@@ -49,7 +51,7 @@ else
                     </td>
                     <td>
                         <a class="nav-link" href="Start/@contest.Id">
-                            <span class="oi oi-trash" aria-hidden="true">Start</span>
+                            <span class="oi oi-media-play" aria-hidden="true">Start</span>
                         </a>
                     </td>
                 </tr>

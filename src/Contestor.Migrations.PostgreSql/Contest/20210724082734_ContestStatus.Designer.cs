@@ -3,15 +3,17 @@ using System;
 using Contestor.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Contestor.Migrations.PostgreSql.Contest
 {
     [DbContext(typeof(ContestDbContext))]
-    partial class ContestDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210724082734_ContestStatus")]
+    partial class ContestStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,10 +36,6 @@ namespace Contestor.Migrations.PostgreSql.Contest
                     b.Property<string>("ProcessKey")
                         .HasColumnType("text")
                         .HasColumnName("process_key");
-
-                    b.Property<string>("ProcessName")
-                        .HasColumnType("text")
-                        .HasColumnName("process_name");
 
                     b.Property<string>("Status")
                         .HasColumnType("text")

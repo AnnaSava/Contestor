@@ -20,7 +20,8 @@ namespace Contestor.Data.Mapper
             CreateMap<RoleModel, Role>();
 
             CreateMap<Contest, ContestModel>();
-            CreateMap<ContestModel, Contest>();
+            CreateMap<ContestModel, Contest>()
+                .ForMember(x => x.Status, y => y.MapFrom(s => string.IsNullOrEmpty(s.Status) ? "draft" : s.Status));
 
             CreateMap<Participant, ParticipantModel>();
             CreateMap<ParticipantModel, Participant>();

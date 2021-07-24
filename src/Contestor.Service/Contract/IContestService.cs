@@ -11,6 +11,8 @@ namespace Contestor.Service.Contract
     {
         Task<ContestModel> Create(ContestModel model);
 
+        Task SetFinishedStatus(long contestId);
+
         Task<ContestModel> GetOne(long id);
 
         Task<IEnumerable<ContestModel>> GetAll(int page, int count);

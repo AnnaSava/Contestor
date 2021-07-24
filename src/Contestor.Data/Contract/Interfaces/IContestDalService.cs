@@ -11,6 +11,8 @@ namespace Contestor.Data.Contract.Interfaces
     {
         Task<ContestModel> Create(ContestModel model);
 
+        Task<long> SetStatus(long contestId, string status);
+
         Task<ContestModel> GetOne(long id);
 
         Task<IEnumerable<ContestModel>> GetAll(int page, int count);
