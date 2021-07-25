@@ -21,9 +21,10 @@ namespace Contestor.BpmEngine.Api.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task SetFinishedStatus(long contestId)
+        public async Task<string> SetFinishedStatus(string contestId)
         {
-            await _contestService.SetFinishedStatus(contestId);
+            await _contestService.SetFinishedStatus(long.Parse(contestId));
+            return contestId + "ok";
         }
     }
 }

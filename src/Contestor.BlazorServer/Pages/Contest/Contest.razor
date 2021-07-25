@@ -1,0 +1,27 @@
+﻿@page "/Contest/{Id}"
+@using Contestor.Data.Contract.Models
+@using Contestor.Service.Contract
+@inject IContestService contestService
+@inject NavigationManager NavigationManager
+
+<h3>Contest @obj.Title</h3>
+
+<form>
+    <input type="button" class="btn btn-primary" @onclick="@Register" value="Start" />
+</form>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    ContestModel obj = new ContestModel();
+    protected override async Task OnInitializedAsync()
+    {
+        obj = await Task.Run(() => contestService.GetOne(Convert.ToInt64(Id)));
+    }
+
+    protected async void Register()
+    {
+        await contestService.RegisterParticipant(obj.Id, 1);
+        NavigationManager.NavigateTo("Contest/" + Id);
+    }
+}

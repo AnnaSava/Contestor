@@ -20,5 +20,9 @@ namespace Contestor.Service.Contract
         Task<Dictionary<string, string>> GetProcessesDictionary();
 
         Task<string> StartContestProcess(long contestId);
+
+        Task RegisterParticipant(long contestId, long userId);
+
+        Task SendWork(WorkModel model);
     }
 }

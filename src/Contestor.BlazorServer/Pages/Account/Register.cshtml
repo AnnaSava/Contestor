@@ -1,0 +1,25 @@
+﻿@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model Contestor.BlazorServer.Pages.Account.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h1>Register</h1>
+
+<form method="post" asp-controller="Account" asp-action="Register">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="Input.UserName"></label><br />
+        <input asp-for="Input.UserName" />
+        <span asp-validation-for="Input.UserName"></span>
+    </div>
+    <div>
+        <label asp-for="Input.Password"></label><br />
+        <input asp-for="Input.Password" />
+        <span asp-validation-for="Input.Password"></span>
+    </div>
+    <div>
+        <input type="submit" value="Регистрация" />
+    </div>
+</form>

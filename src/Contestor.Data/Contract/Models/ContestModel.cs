@@ -16,6 +16,8 @@ namespace Contestor.Data.Contract.Models
 
         public string ProcessKey { get; set; }
 
+        public int RoundNumber { get; set; }
+
         public string Status { get; set; }
     }
 }

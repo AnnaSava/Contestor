@@ -16,6 +16,10 @@ namespace Contestor.Data.Entities
 
         public virtual Contest Contest { get; set; }
 
+        public int RoundNumber { get; set; }
+
         public string Title { get; set; }
+
+        public string Content { get; set; }
     }
 }

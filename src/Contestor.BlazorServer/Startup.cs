@@ -3,15 +3,19 @@ using Contestor.BlazorServer.Data;
 using Contestor.BpmEngine.Contract;
 using Contestor.BpmEngine.Service;
 using Contestor.Data;
+using Contestor.Data.Contract;
 using Contestor.Data.Contract.Interfaces;
+using Contestor.Data.Entities;
 using Contestor.Data.Mapper;
 using Contestor.Data.Services;
 using Contestor.Service.Contract;
 using Contestor.Service.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,6 +47,10 @@ namespace Contestor.BlazorServer
                     .UseSnakeCaseNamingConvention();
             });
 
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<ContestDbContext>()
+                .AddDefaultTokenProviders();
+
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new ContestMapperProfile());
@@ -68,6 +76,15 @@ namespace Contestor.BlazorServer
             services.AddScoped<IContestService>(s => new ContestService(
                 s.GetService<IContestDalService>(),
                 s.GetService<IBpmEngineClient>()));
+
+            services.AddScoped<IUserDalService>(s => new UserDalService(
+                s.GetService<UserManager<User>>(),
+                s.GetService<SignInManager<User>>(),
+                s.GetService<IMapper>()));
+
+            services.AddScoped<IUserService>(s => new UserService(
+                s.GetService<IUserDalService>(),
+                s.GetService<IMapper>()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -88,6 +105,9 @@ namespace Contestor.BlazorServer
             app.UseStaticFiles();
 
             app.UseRouting();
+            
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

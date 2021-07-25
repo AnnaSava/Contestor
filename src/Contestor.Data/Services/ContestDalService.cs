@@ -51,7 +51,7 @@ namespace Contestor.Data.Services
         {
             return await _dbContext.Contests
                 .AsNoTracking()
-                .OrderBy(m => m.Id)
+                .OrderByDescending(m => m.Id)
                 .Skip((page - 1) * count)
                 .Take(count)
                 .ProjectTo<ContestModel>(_mapper.ConfigurationProvider)
@@ -98,6 +98,35 @@ namespace Contestor.Data.Services
                 .Take(count)
                 .ProjectTo<WorkModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
+        }
+
+        public async Task RegisterParticipant(long contestId, long userId)
+        {
+            var user = await _dbContext.Users.FirstOrDefaultAsync(m=>m.Id == userId);
+
+            var participant = new Participant
+            {
+                UserId = userId,
+                ContestId = contestId,
+                DisplayName = user.UserName
+            };
+
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<ParticipantModel> GetParticipant(long contestId, long userId)
+        {
+            var entity = await _dbContext.Participants.FirstOrDefaultAsync(m => m.ContestId == contestId && m.UserId == userId);
+
+            return _mapper.Map<ParticipantModel>(entity);
+        }
+
+        public async Task SendWork(WorkModel model)
+        {
+            var entity = _mapper.Map<Work>(model);
+
+            _dbContext.Works.Add(entity);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

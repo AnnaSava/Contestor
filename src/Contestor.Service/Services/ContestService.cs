@@ -60,5 +60,22 @@ namespace Contestor.Service.Services
             await _contestDalService.SetStatus(contestId, "open");
             return process;
         }
+
+        public async Task RegisterParticipant(long contestId, long userId)
+        {
+            await _contestDalService.RegisterParticipant(contestId, userId);
+        }
+
+        public async Task SendWork(WorkModel model)
+        {
+            var participant = _contestDalService.GetParticipant(model.ContestId, 1);
+
+            var contest = await _contestDalService.GetOne(model.ContestId);
+
+            model.RoundNumber = contest.RoundNumber;
+            model.ParticipantId = participant.Id;
+
+            await _contestDalService.SendWork(model);
+        }
     }
 }
