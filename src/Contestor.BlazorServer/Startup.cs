@@ -40,12 +40,23 @@ namespace Contestor.BlazorServer
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ContestDbContext>(options =>
+            //services.AddDbContext<ContestDbContext>(options =>
+            //{
+            //    options
+            //        .UseNpgsql(Configuration.GetConnectionString("ContestConnection"), b => b.MigrationsAssembly("Contestor.Migrations.PostgreSql"))
+            //        .UseSnakeCaseNamingConvention();
+            //});
+
+            services.AddDbContextFactory<ContestDbContext>(options =>
             {
                 options
                     .UseNpgsql(Configuration.GetConnectionString("ContestConnection"), b => b.MigrationsAssembly("Contestor.Migrations.PostgreSql"))
                     .UseSnakeCaseNamingConvention();
             });
+
+            services.AddScoped<ContestDbContext>(p =>
+                p.GetRequiredService<IDbContextFactory<ContestDbContext>>()
+                .CreateDbContext());
 
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<ContestDbContext>()

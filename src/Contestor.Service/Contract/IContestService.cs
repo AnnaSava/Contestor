@@ -23,6 +23,8 @@ namespace Contestor.Service.Contract
 
         Task RegisterParticipant(long contestId, long userId);
 
+        Task<ParticipantModel> GetParticipant(long contestId, long userId);
+
         Task SendWork(WorkModel model);
     }
 }

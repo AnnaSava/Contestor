@@ -1,8 +1,10 @@
 ﻿@page "/SendWork/{Id}"
 @using Contestor.Service.Contract
 @using Contestor.Data.Contract.Models
+@using System.Security.Claims
 @inject IContestService contestService
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider authProvider
 
 <h3>Send Work</h3>
 
@@ -10,11 +12,11 @@
     <div class="row">
         <div class="col-md-8">
             <div class="form-group">
-                <label for="Title" class="control-label">Title</label>
+                <label for="Title" class="control-label">Заголовок</label>
                 <input form="Title" class="form-control" @bind="@obj.Title" />
             </div>
             <div class="form-group">
-                <label for="Description" class="control-label">Description</label>
+                <label for="Description" class="control-label">Содержание</label>
                 <input form="Description" class="form-control" @bind="@obj.Content" />
             </div>
         </div>
@@ -23,8 +25,8 @@
     <div class="row">
         <div class="col-md-4">
             <div class="form-group">
-                <input type="button" class="btn btn-primary" @onclick="@Send" value="Save" />
-                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+                <input type="button" class="btn btn-primary" @onclick="@Send" value="Отправить" />
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Отмена" />
             </div>
         </div>
     </div>
@@ -37,9 +39,15 @@
     WorkModel obj = new WorkModel();
     protected async void Send()
     {
+        //var authstate = await authProvider.GetAuthenticationStateAsync();
+       // var user = authstate.User;
+
+        //var id = user.FindFirst(ClaimTypes.NameIdentifier);
+
+        obj.ParticipantId = 1;// long.Parse(id.Value);
         obj.ContestId = Convert.ToInt64(Id);
         await contestService.SendWork(obj);
-        NavigationManager.NavigateTo("Contests");
+        //NavigationManager.NavigateTo("Contests");
     }
     void Cancel()
     {

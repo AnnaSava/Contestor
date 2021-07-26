@@ -21,5 +21,7 @@ namespace Contestor.Data.Entities
         public string Status { get; set; }
 
         public virtual ICollection<Participant> Participants { get; set; }
+
+        public virtual ICollection<Work> Works { get; set; }
     }
 }

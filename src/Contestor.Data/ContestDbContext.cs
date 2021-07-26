@@ -24,7 +24,27 @@ namespace Contestor.Data
             base.OnModelCreating(builder);
 
             builder.Entity<Participant>()
+                .HasOne(m => m.User)
+                .WithMany(m => m.Participants)
+                .HasForeignKey(m => m.UserId);
+
+            builder.Entity<Participant>()
+                .HasOne(m => m.Contest)
+                .WithMany(m => m.Participants)
+                .HasForeignKey(m => m.ContestId);
+
+            builder.Entity<Participant>()
                 .HasKey(m => new { m.UserId, m.ContestId });
+
+            builder.Entity<Work>()
+                .HasOne(m => m.Participant)
+                .WithMany(m => m.Works)
+                .HasForeignKey(m => new { m.ParticipantId, m.ContestId });
+
+            builder.Entity<Work>()
+                .HasOne(m => m.Contest)
+                .WithMany(m => m.Works)
+                .HasForeignKey(m => m.ContestId);
         }
     }
 }

@@ -9,5 +9,6 @@ namespace Contestor.Data.Entities
 {
     public class User : IdentityUser<long>
     {
+        public virtual ICollection<Participant> Participants { get; set; }
     }
 }

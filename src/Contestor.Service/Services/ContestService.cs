@@ -66,14 +66,20 @@ namespace Contestor.Service.Services
             await _contestDalService.RegisterParticipant(contestId, userId);
         }
 
+        public async Task<ParticipantModel> GetParticipant(long contestId, long userId)
+        {
+            return await _contestDalService.GetParticipant(contestId, userId);
+        }
+
         public async Task SendWork(WorkModel model)
         {
-            var participant = _contestDalService.GetParticipant(model.ContestId, 1);
+            var participant = await _contestDalService.GetParticipant(model.ContestId, model.ParticipantId);
+            if (participant == null) throw new Exception($"Участник {model.ParticipantId} не зарегистрирован на конкурс {model.ContestId}");
 
             var contest = await _contestDalService.GetOne(model.ContestId);
 
             model.RoundNumber = contest.RoundNumber;
-            model.ParticipantId = participant.Id;
+            model.ParticipantId = model.ParticipantId;
 
             await _contestDalService.SendWork(model);
         }

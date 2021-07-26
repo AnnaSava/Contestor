@@ -1,14 +1,24 @@
 ﻿@page "/Contest/{Id}"
 @using Contestor.Data.Contract.Models
 @using Contestor.Service.Contract
+@using System.Security.Claims
 @inject IContestService contestService
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider authProvider
 
 <h3>Contest @obj.Title</h3>
 
 <form>
-    <input type="button" class="btn btn-primary" @onclick="@Register" value="Start" />
+    <input type="button" class="btn btn-primary" @onclick="@Register" value="Принять участие" />
 </form>
+
+<AuthorizeView>
+    <Authorized>
+        <a class="nav-link" href="SendWork/@Id">
+            <span class="oi oi-pencil" aria-hidden="true">Прислать работу</span>
+        </a>
+    </Authorized>
+</AuthorizeView>
 
 @code {
     [Parameter]
@@ -21,7 +31,12 @@
 
     protected async void Register()
     {
-        await contestService.RegisterParticipant(obj.Id, 1);
+        var authstate = await authProvider.GetAuthenticationStateAsync();
+        var user = authstate.User;
+
+        var id = user.FindFirst(ClaimTypes.NameIdentifier);
+
+        await contestService.RegisterParticipant(obj.Id, long.Parse(id.Value));
         NavigationManager.NavigateTo("Contest/" + Id);
     }
 }

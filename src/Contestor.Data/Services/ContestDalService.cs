@@ -111,6 +111,7 @@ namespace Contestor.Data.Services
                 DisplayName = user.UserName
             };
 
+            _dbContext.Participants.Add(participant);
             await _dbContext.SaveChangesAsync();
         }
 
