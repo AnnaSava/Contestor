@@ -3,15 +3,17 @@ using System;
 using Contestor.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Contestor.Migrations.PostgreSql.Contest
 {
     [DbContext(typeof(ContestDbContext))]
-    partial class ContestDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210726195045_MaxWorksCount")]
+    partial class MaxWorksCount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,40 +65,6 @@ namespace Contestor.Migrations.PostgreSql.Contest
                         .HasName("pk_contests");
 
                     b.ToTable("contests");
-                });
-
-            modelBuilder.Entity("Contestor.Data.Entities.ContestLog", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Action")
-                        .HasColumnType("text")
-                        .HasColumnName("action");
-
-                    b.Property<long>("ContestId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("contest_id");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("date_time");
-
-                    b.Property<string>("Message")
-                        .HasColumnType("text")
-                        .HasColumnName("message");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("text")
-                        .HasColumnName("value");
-
-                    b.HasKey("Id")
-                        .HasName("pk_contest_logs");
-
-                    b.ToTable("contest_logs");
                 });
 
             modelBuilder.Entity("Contestor.Data.Entities.Participant", b =>

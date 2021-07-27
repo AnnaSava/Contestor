@@ -21,6 +21,8 @@ namespace Contestor.Data.Entities
 
         public string DisplayName { get; set; }
 
+        public int WorksCount { get; set; }
+
         public ICollection<Work> Works { get; set; }
     }
 }

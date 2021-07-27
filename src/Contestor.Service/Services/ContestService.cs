@@ -1,4 +1,5 @@
 ﻿using Contestor.BpmEngine.Contract;
+using Contestor.Data.Contract;
 using Contestor.Data.Contract.Interfaces;
 using Contestor.Data.Contract.Models;
 using Contestor.Service.Contract;
@@ -29,9 +30,29 @@ namespace Contestor.Service.Services
             return await _contestDalService.Create(model);
         }
 
+        public async Task Open(long contestId)
+        {
+            await _contestDalService.SetStatus(contestId, ContestStatus.Open);
+        }
+
+        public async Task OpenRegistration(long contestId)
+        {
+            await _contestDalService.SetStatus(contestId, ContestStatus.RegistrationOpen);
+        }
+
+        public async Task StartVoting(long contestId)
+        {
+            await _contestDalService.SetStatus(contestId, ContestStatus.Voting);
+        }
+
+        public async Task WaitWinner(long contestId)
+        {
+            await _contestDalService.SetStatus(contestId, ContestStatus.WaitingWinner);
+        }
+
         public async Task SetFinishedStatus(long contestId)
         {
-            await _contestDalService.SetStatus(contestId, "finished");
+            await _contestDalService.SetStatus(contestId, ContestStatus.Finished);
         }
 
         public async Task<ContestModel> GetOne(long id)
@@ -42,6 +63,11 @@ namespace Contestor.Service.Services
         public async Task<IEnumerable<ContestModel>> GetAll(int page, int count)
         {
             return await _contestDalService.GetAll(page, count);
+        }
+
+        public async Task<IEnumerable<ContestModel>> GetAllForNewParticipants(long visitorId, int page, int count)
+        {
+            return await _contestDalService.GetAllForNewParticipants(visitorId, page, count);
         }
 
         public async Task<Dictionary<string, string>> GetProcessesDictionary()
@@ -57,7 +83,7 @@ namespace Contestor.Service.Services
             var startProcessModel = new StartProcessModel { ProcessId = contest.ProcessKey, BusinessKey = contest.Id.ToString() };
 
             var process = await _bpmEngineService.StartProcess(startProcessModel);
-            await _contestDalService.SetStatus(contestId, "open");
+            await _contestDalService.SetStatus(contestId, ContestStatus.Started);
             return process;
         }
 
@@ -73,10 +99,11 @@ namespace Contestor.Service.Services
 
         public async Task SendWork(WorkModel model)
         {
-            var participant = await _contestDalService.GetParticipant(model.ContestId, model.ParticipantId);
-            if (participant == null) throw new Exception($"Участник {model.ParticipantId} не зарегистрирован на конкурс {model.ContestId}");
-
             var contest = await _contestDalService.GetOne(model.ContestId);
+            var participant = await _contestDalService.GetParticipant(model.ContestId, model.ParticipantId);
+            if (participant == null && contest.AutoRegEnabled == false) throw new Exception($"Участник {model.ParticipantId} не зарегистрирован на конкурс {model.ContestId}");
+
+            if (participant == null) await _contestDalService.RegisterParticipant(contest.Id, model.ParticipantId);
 
             model.RoundNumber = contest.RoundNumber;
             model.ParticipantId = model.ParticipantId;

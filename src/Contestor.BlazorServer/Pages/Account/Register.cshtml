@@ -5,7 +5,12 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>Register</h1>
+<h1>Регистрация</h1>
+
+@if (Model.Contest != null)
+{
+    <h4>Регистрация в системе и подача заявки на конкурс "@Model.Contest.Title"</h4>
+}
 
 <form method="post" asp-controller="Account" asp-action="Register">
     <div asp-validation-summary="ModelOnly"></div>
@@ -20,6 +25,6 @@
         <span asp-validation-for="Input.Password"></span>
     </div>
     <div>
-        <input type="submit" value="Регистрация" />
+        <input type="submit" value="Регистрация" class="btn btn-primary" />
     </div>
 </form>

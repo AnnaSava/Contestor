@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Contestor.BlazorServer.Pages.Account
 {
-   // [IgnoreAntiforgeryToken]
+    [IgnoreAntiforgeryToken]
     public class LogoutModel : PageModel
     {
         private readonly IUserService _userService;
@@ -17,12 +17,6 @@ namespace Contestor.BlazorServer.Pages.Account
         public LogoutModel(IUserService userService)
         {
             _userService = userService;
-        }
-        public async Task<IActionResult> OnGetAsync()
-        {
-            // удаляем аутентификационные куки
-            await _userService.Logout();
-            return Redirect("~/");
         }
 
         public async Task<IActionResult> OnPostAsync()

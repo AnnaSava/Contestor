@@ -11,5 +11,7 @@ namespace Contestor.Service.Contract
         public string UserName { get; set; }
 
         public string Password { get; set; }
+
+        public long? ContestId { get; set; }
     }
 }

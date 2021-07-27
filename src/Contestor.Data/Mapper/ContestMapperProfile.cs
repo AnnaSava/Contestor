@@ -21,7 +21,8 @@ namespace Contestor.Data.Mapper
 
             CreateMap<Contest, ContestModel>();
             CreateMap<ContestModel, Contest>()
-                .ForMember(x => x.Status, y => y.MapFrom(s => string.IsNullOrEmpty(s.Status) ? "draft" : s.Status));
+                .ForMember(x => x.Status, y => y.MapFrom(s => string.IsNullOrEmpty(s.Status) ? "draft" : s.Status))
+                .ForMember(x => x.MaxWorksCount, y => y.MapFrom(s => s.MaxWorksCount == 0 ? 1 : s.MaxWorksCount));
 
             CreateMap<Participant, ParticipantModel>();
             CreateMap<ParticipantModel, Participant>();

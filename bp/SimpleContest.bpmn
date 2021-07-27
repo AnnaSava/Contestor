@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_16jbtzc" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.9.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+  <bpmn:process id="Process_1708yz0" name="SimpleContest" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_06jmrdy</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="Event_1rtrpte">
+      <bpmn:incoming>Flow_0zid5aj</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_06jmrdy" sourceRef="StartEvent_1" targetRef="Activity_0pmxg87" />
+    <bpmn:userTask id="Activity_18ig9f0" name="Публикация результатов">
+      <bpmn:incoming>Flow_08izzyg</bpmn:incoming>
+      <bpmn:outgoing>Flow_08w6f8n</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0zid5aj" sourceRef="Activity_0o25c87" targetRef="Event_1rtrpte" />
+    <bpmn:serviceTask id="Activity_0o25c87" name="Cтатус: конкурс окончен">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="payload" />
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Accept">text/plain</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="url">http://172.19.64.1:5002/api/Contest/SetFinishedStatus?contestId=${contestId}</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08w6f8n</bpmn:incoming>
+      <bpmn:outgoing>Flow_0zid5aj</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:scriptTask id="Activity_0pmxg87" name="Инициализация процесса" scriptFormat="groovy">
+      <bpmn:incoming>Flow_06jmrdy</bpmn:incoming>
+      <bpmn:outgoing>Flow_0el7vsj</bpmn:outgoing>
+      <bpmn:script>def contestId = execution.getProcessBusinessKey().toString();
+execution.setVariable('contestId', contestId);
+
+def apiUrl = 'http://172.19.64.1:5002/api/Contest/';
+execution.setVariable('apiUrl', apiUrl);</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_08w6f8n" sourceRef="Activity_18ig9f0" targetRef="Activity_0o25c87" />
+    <bpmn:sequenceFlow id="Flow_0el7vsj" sourceRef="Activity_0pmxg87" targetRef="Activity_1wzuaag" />
+    <bpmn:sequenceFlow id="Flow_18wq9bw" sourceRef="Event_0v9bfr1" targetRef="Activity_1vtki5d" />
+    <bpmn:intermediateCatchEvent id="Event_0v9bfr1" name="Окончание этапа регистрации">
+      <bpmn:incoming>Flow_1d4kbuz</bpmn:incoming>
+      <bpmn:outgoing>Flow_18wq9bw</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_17qf9aq">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P0Y0M0DT0H2M0S</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_1y0o0wj" sourceRef="Event_0wsdzji" targetRef="Activity_0ienjos" />
+    <bpmn:intermediateCatchEvent id="Event_0wsdzji" name="Окончание приема работ">
+      <bpmn:incoming>Flow_01itb7l</bpmn:incoming>
+      <bpmn:outgoing>Flow_1y0o0wj</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_0ugbpfo">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P0Y0M0DT0H2M0S</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_1om48j3" sourceRef="Event_1oeasej" targetRef="Activity_05nsioz" />
+    <bpmn:intermediateCatchEvent id="Event_1oeasej" name="Окончание голосования">
+      <bpmn:incoming>Flow_1mq1vz1</bpmn:incoming>
+      <bpmn:outgoing>Flow_1om48j3</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_10unrlw">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P0Y0M0DT0H2M0S</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:serviceTask id="Activity_1wzuaag" name="Этап: регистрация участников">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="payload" />
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Accept">text/plain</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="url">${apiUrl}OpenRegistration?contestId=${contestId}</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0el7vsj</bpmn:incoming>
+      <bpmn:outgoing>Flow_1d4kbuz</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1d4kbuz" sourceRef="Activity_1wzuaag" targetRef="Event_0v9bfr1" />
+    <bpmn:serviceTask id="Activity_1vtki5d" name="Этап: прием работ">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="payload" />
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Accept">text/plain</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="url">${apiUrl}Open?contestId=${contestId}</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_18wq9bw</bpmn:incoming>
+      <bpmn:outgoing>Flow_01itb7l</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_01itb7l" sourceRef="Activity_1vtki5d" targetRef="Event_0wsdzji" />
+    <bpmn:serviceTask id="Activity_0ienjos" name="Этап: голосование">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="payload" />
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Accept">text/plain</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="url">${apiUrl}StartVoting?contestId=${contestId}</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1y0o0wj</bpmn:incoming>
+      <bpmn:outgoing>Flow_1mq1vz1</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1mq1vz1" sourceRef="Activity_0ienjos" targetRef="Event_1oeasej" />
+    <bpmn:serviceTask id="Activity_05nsioz" name="Статус: ожидание результатов">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="payload" />
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Accept">text/plain</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="url">${apiUrl}WaitWinner?contestId=${contestId}</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1om48j3</bpmn:incoming>
+      <bpmn:outgoing>Flow_08izzyg</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_08izzyg" sourceRef="Activity_05nsioz" targetRef="Activity_18ig9f0" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1708yz0">
+      <bpmndi:BPMNEdge id="Flow_08izzyg_di" bpmnElement="Flow_08izzyg">
+        <di:waypoint x="1080" y="117" />
+        <di:waypoint x="1130" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1mq1vz1_di" bpmnElement="Flow_1mq1vz1">
+        <di:waypoint x="870" y="117" />
+        <di:waypoint x="902" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_01itb7l_di" bpmnElement="Flow_01itb7l">
+        <di:waypoint x="650" y="117" />
+        <di:waypoint x="692" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1d4kbuz_di" bpmnElement="Flow_1d4kbuz">
+        <di:waypoint x="450" y="117" />
+        <di:waypoint x="482" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1om48j3_di" bpmnElement="Flow_1om48j3">
+        <di:waypoint x="938" y="117" />
+        <di:waypoint x="980" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1y0o0wj_di" bpmnElement="Flow_1y0o0wj">
+        <di:waypoint x="728" y="117" />
+        <di:waypoint x="770" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_18wq9bw_di" bpmnElement="Flow_18wq9bw">
+        <di:waypoint x="518" y="117" />
+        <di:waypoint x="550" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0el7vsj_di" bpmnElement="Flow_0el7vsj">
+        <di:waypoint x="310" y="117" />
+        <di:waypoint x="350" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08w6f8n_di" bpmnElement="Flow_08w6f8n">
+        <di:waypoint x="1230" y="117" />
+        <di:waypoint x="1280" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0zid5aj_di" bpmnElement="Flow_0zid5aj">
+        <di:waypoint x="1380" y="117" />
+        <di:waypoint x="1472" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06jmrdy_di" bpmnElement="Flow_06jmrdy">
+        <di:waypoint x="188" y="117" />
+        <di:waypoint x="210" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1rtrpte_di" bpmnElement="Event_1rtrpte">
+        <dc:Bounds x="1472" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0d2yxgs_di" bpmnElement="Activity_18ig9f0">
+        <dc:Bounds x="1130" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ek3uib_di" bpmnElement="Activity_0o25c87">
+        <dc:Bounds x="1280" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_044gzyh_di" bpmnElement="Activity_0pmxg87">
+        <dc:Bounds x="210" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1dyptug_di" bpmnElement="Event_0v9bfr1">
+        <dc:Bounds x="482" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="457" y="142" width="88" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0h2b5li_di" bpmnElement="Event_0wsdzji">
+        <dc:Bounds x="692" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="674" y="61.5" width="72" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0g6s3my_di" bpmnElement="Event_1oeasej">
+        <dc:Bounds x="902" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="889" y="142" width="65" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1wzuaag_di" bpmnElement="Activity_1wzuaag">
+        <dc:Bounds x="350" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1vtki5d_di" bpmnElement="Activity_1vtki5d">
+        <dc:Bounds x="550" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ienjos_di" bpmnElement="Activity_0ienjos">
+        <dc:Bounds x="770" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05nsioz_di" bpmnElement="Activity_05nsioz">
+        <dc:Bounds x="980" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

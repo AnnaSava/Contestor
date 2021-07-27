@@ -19,6 +19,8 @@ namespace Contestor.Data
 
         public DbSet<Participant> Participants { get; set; }
 
+        public DbSet<ContestLog> ContestLogs { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

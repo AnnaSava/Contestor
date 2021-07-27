@@ -1,5 +1,8 @@
 ﻿@page "/"
 @using System.Security.Claims
+@using Contestor.Data.Contract.Models
+@using Contestor.Service.Contract
+@inject IContestService contestService
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 
 <h1>Hello, world!</h1>
@@ -9,7 +12,96 @@
 
 Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@if (ContestsList is null)
+{
+    <p><em>Loading... !</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>ProcessName</th>
+                <th>Status</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var contest in ContestsList)
+            {
+                <tr>
+                    <td>@contest.Id</td>
+                    <td>@contest.Title</td>
+                    <td>@contest.Description</td>
+                    <td>@contest.ProcessName</td>
+                    <td>@contest.Status</td>
+                    <td>
+                        <AuthorizeView>
+                            <Authorized>
+                                @if (contest.Status == "regopen")
+                                {
+                                    @if (contest.VisitorIsParticipant)
+                                    {
+
+
+<span>Вы участвуете</span>
+                                    }
+                                    else
+                                    {
+                            <a class="nav-link" href="/Contest/@contest.Id">
+                                <span class="oi oi-pencil" aria-hidden="true">Принять участие</span>
+                            </a>
+                                    }
+                                }
+                                else if (contest.Status == "open") { 
+                                @if(contest.VisitorWorksCount < contest.MaxWorksCount)
+                    {
+                            <a class="nav-link" href="/SendWork/@contest.Id">
+                                <span class="oi oi-pencil" aria-hidden="true">Прислать работу</span>
+                            </a>
+                                }
+                                else
+                    {
+                        <span>Вы уже прислали допустимое количество работ</span>
+                    }
+                                }
+                                </Authorized>
+                            <NotAuthorized>
+                                @if (contest.Status == "regopen")
+                                {
+                                    <a class="nav-link" href="/Account/Register?contestId=@contest.Id">
+                                        <span class="oi oi-pencil" aria-hidden="true">Принять участие</span>
+                                    </a>
+                                }
+                                else if (contest.Status == "open" && contest.AutoRegEnabled)
+                                {
+                                    <a class="nav-link" href="/Account/Register?contestId=@contest.Id&sendwork=@true">
+                                        <span class="oi oi-pencil" aria-hidden="true">Прислать работу</span>
+                                    </a>
+                                }
+                            </NotAuthorized>
+                        </AuthorizeView>
+                    </td>
+                    <td>
+                        <a class="nav-link" href="Delete/@contest.Id">
+                            <span class="oi oi-trash" aria-hidden="true">Delete</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="nav-link" href="Start/@contest.Id">
+                            <span class="oi oi-media-play" aria-hidden="true">Start</span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 @code {
     string UserName = string.Empty;
@@ -17,20 +109,26 @@ Welcome to your new app.
     private string _surnameMessage;
     private IEnumerable<Claim> _claims = Enumerable.Empty<Claim>();
 
+    List<ContestModel> ContestsList;
+
     protected async override Task OnInitializedAsync()
     {
         var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
         var user = authstate.User;
 
+        long id = 0;
         if (user.Identity.IsAuthenticated)
         {
             _authMessage = $"{user.Identity.Name} is authenticated.";
-            _claims = user.Claims; 
+            _claims = user.Claims;
             UserName = user.Identity.Name;
+            id = long.Parse(user.FindFirst(ClaimTypes.NameIdentifier).Value);
         }
         else
         {
             _authMessage = "The user is NOT authenticated.";
         }
+
+        ContestsList = (await contestService.GetAllForNewParticipants(id, 1, 10)).ToList();
     }
 }

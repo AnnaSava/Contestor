@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Contestor.Data.Contract;
 using Contestor.Data.Contract.Interfaces;
 using Contestor.Data.Contract.Models;
 using Contestor.Data.Entities;
@@ -35,6 +36,9 @@ namespace Contestor.Data.Services
 
             entity.Status = status;
             await _dbContext.SaveChangesAsync();
+
+            await LogContest(entity.Id, nameof(SetStatus), status);
+
             return entity.Id;
         }
 
@@ -56,6 +60,59 @@ namespace Contestor.Data.Services
                 .Take(count)
                 .ProjectTo<ContestModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<ContestModel>> GetAllByStatus(string status, int page, int count)
+        {
+            return await _dbContext.Contests
+                .Where(m => m.Status == status)
+                .AsNoTracking()
+                .OrderByDescending(m => m.Id)
+                .Skip((page - 1) * count)
+                .Take(count)
+                .ProjectTo<ContestModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<ContestModel>> GetAllForNewParticipants(long visitorId, int page, int count)
+        {
+            if (visitorId == 0) return await _dbContext.Contests
+                  .Where(m => m.Status == ContestStatus.RegistrationOpen || (m.Status == ContestStatus.Open && m.AutoRegEnabled))
+                  .AsNoTracking()
+                  .OrderByDescending(m => m.Id)
+                  .Skip((page - 1) * count)
+                  .Take(count)
+                  .ProjectTo<ContestModel>(_mapper.ConfigurationProvider)
+                  .ToListAsync();
+
+            var visitorRegDoneContests = await _dbContext.Contests
+                .Where(m => m.Status == ContestStatus.RegistrationOpen || m.Status == ContestStatus.Open)
+                .Join(_dbContext.Participants.Where(m => m.UserId == visitorId),
+                c => c.Id,
+                p => p.ContestId,
+                (c, p) => new { c.Id, p.WorksCount }).ToListAsync();
+
+            var visitorRegDoneContestIds = visitorRegDoneContests.Select(m => m.Id);
+
+            var contests = await _dbContext.Contests
+                  .Where(m => m.Status == ContestStatus.RegistrationOpen || (m.Status == ContestStatus.Open && (m.AutoRegEnabled || visitorRegDoneContestIds.Contains(m.Id))))
+                  .AsNoTracking()
+                  .OrderByDescending(m => m.Id)
+                  .Skip((page - 1) * count)
+                  .Take(count)
+                  .ProjectTo<ContestModel>(_mapper.ConfigurationProvider)
+                  .ToListAsync();
+
+            foreach (var contest in contests)
+            {
+                var visitorContest = visitorRegDoneContests.Where(m => m.Id == contest.Id).FirstOrDefault();
+                if (visitorContest != null)
+                {
+                    contest.VisitorIsParticipant = true;
+                    contest.VisitorWorksCount = visitorContest.WorksCount;
+                }
+            }
+            return contests;
         }
 
         public async Task<ParticipantModel> CreateParticipant(ParticipantModel model)
@@ -127,6 +184,26 @@ namespace Contestor.Data.Services
             var entity = _mapper.Map<Work>(model);
 
             _dbContext.Works.Add(entity);
+
+            var participant = await _dbContext.Participants.FirstOrDefaultAsync(m => m.ContestId == model.ContestId && m.UserId == model.ParticipantId);
+
+            if (participant == null) throw new Exception($"Participant {model.ParticipantId} not found for contest {model.ContestId}");
+            participant.WorksCount++;
+            await _dbContext.SaveChangesAsync();
+        }
+
+        private async Task LogContest(long contestId, string action, string value = null, string message = null)
+        {
+            var log = new ContestLog
+            {
+                ContestId = contestId,
+                Action = action,
+                Value = value,
+                Message = message,
+                DateTime = DateTime.Now
+            };
+
+            _dbContext.ContestLogs.Add(log);
             await _dbContext.SaveChangesAsync();
         }
     }

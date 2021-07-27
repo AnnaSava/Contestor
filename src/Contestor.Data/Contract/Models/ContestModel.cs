@@ -19,5 +19,17 @@ namespace Contestor.Data.Contract.Models
         public int RoundNumber { get; set; }
 
         public string Status { get; set; }
+
+        public bool AutoRegEnabled { get; set; }
+
+        public int MaxWorksCount { get; set; }
+
+        #region ViewModel additions
+
+        public bool VisitorIsParticipant { get; set; }
+
+        public int VisitorWorksCount { get; set; }
+
+        #endregion
     }
 }

@@ -39,15 +39,15 @@
     WorkModel obj = new WorkModel();
     protected async void Send()
     {
-        //var authstate = await authProvider.GetAuthenticationStateAsync();
-       // var user = authstate.User;
+        var authstate = await authProvider.GetAuthenticationStateAsync();
+        var user = authstate.User;
 
-        //var id = user.FindFirst(ClaimTypes.NameIdentifier);
+        var id = user.FindFirst(ClaimTypes.NameIdentifier);
 
-        obj.ParticipantId = 1;// long.Parse(id.Value);
+        obj.ParticipantId = long.Parse(id.Value);
         obj.ContestId = Convert.ToInt64(Id);
         await contestService.SendWork(obj);
-        //NavigationManager.NavigateTo("Contests");
+        NavigationManager.NavigateTo("Contests");
     }
     void Cancel()
     {
