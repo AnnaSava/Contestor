@@ -26,17 +26,20 @@ namespace Contestor.Service.Services
         {
             var process = await _bpmEngineService.GetProcessById(model.ProcessKey);
             model.ProcessName = process?.Name;
+            model.AutoRegEnabled = true;
 
             return await _contestDalService.Create(model);
         }
 
         public async Task Open(long contestId)
-        {
+        {            
             await _contestDalService.SetStatus(contestId, ContestStatus.Open);
         }
 
         public async Task OpenRegistration(long contestId)
         {
+            //TODO может сделать UoW, чтобы один раз вызывать dbContext.SaveChanges? или один метод на уровне DAL?
+            await _contestDalService.SetAutoRegEnabled(contestId, false);
             await _contestDalService.SetStatus(contestId, ContestStatus.RegistrationOpen);
         }
 

@@ -13,6 +13,8 @@ namespace Contestor.Data.Contract.Interfaces
 
         Task<long> SetStatus(long contestId, string status);
 
+        Task<long> SetAutoRegEnabled(long contestId, bool autoRegEnabled);
+
         Task<ContestModel> GetOne(long id);
 
         Task<IEnumerable<ContestModel>> GetAll(int page, int count);

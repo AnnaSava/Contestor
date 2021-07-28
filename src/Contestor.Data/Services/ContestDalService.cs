@@ -42,6 +42,20 @@ namespace Contestor.Data.Services
             return entity.Id;
         }
 
+        // TODO объединить с другими методами?
+        public async Task<long> SetAutoRegEnabled(long contestId, bool autoRegEnabled)
+        {
+            var entity = await _dbContext.Contests.FirstOrDefaultAsync(m => m.Id == contestId);
+            if (entity == null) throw new Exception($"Entity {contestId} not found");
+
+            entity.AutoRegEnabled = autoRegEnabled;
+            await _dbContext.SaveChangesAsync();
+
+            await LogContest(entity.Id, nameof(SetAutoRegEnabled), autoRegEnabled.ToString());
+
+            return entity.Id;
+        }
+
         public async Task<ContestModel> GetOne(long id)
         {
             var entity = await _dbContext.Contests
