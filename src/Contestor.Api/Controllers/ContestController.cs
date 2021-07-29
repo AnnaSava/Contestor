@@ -49,9 +49,16 @@ namespace Contestor.BpmEngine.Api.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task SetFinishedStatus(string contestId)
+        public async Task Finish(string contestId)
         {
             await _contestService.SetFinishedStatus(long.Parse(contestId));
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<int> GetParticipantsCount(long contestId)
+        {
+            return await _contestService.GetParticipantsCount(contestId);
         }
     }
 }

@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Contestor.Data.Mapper
 {
-    public class ContestMapperProfile : Profile
+    public class ContestDataMapperProfile : Profile
     {
-        public ContestMapperProfile()
+        public ContestDataMapperProfile()
         {
             CreateMap<User, UserModel>();
             CreateMap<UserModel, User>();

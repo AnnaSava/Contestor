@@ -1,4 +1,5 @@
-﻿using Contestor.BpmEngine.Contract;
+﻿using AutoMapper;
+using Contestor.BpmEngine.Contract;
 using Contestor.Data.Contract;
 using Contestor.Data.Contract.Interfaces;
 using Contestor.Data.Contract.Models;
@@ -15,11 +16,13 @@ namespace Contestor.Service.Services
     {
         private readonly IContestDalService _contestDalService;
         private readonly IBpmEngineClient _bpmEngineService;
+        private readonly IMapper _mapper;
 
-        public ContestService(IContestDalService contestDalService, IBpmEngineClient bpmEngineService)
+        public ContestService(IContestDalService contestDalService, IBpmEngineClient bpmEngineService, IMapper mapper)
         {
             _contestDalService = contestDalService;
             _bpmEngineService = bpmEngineService;
+            _mapper = mapper;
         }
 
         public async Task<ContestModel> Create(ContestModel model)
@@ -60,7 +63,18 @@ namespace Contestor.Service.Services
 
         public async Task<ContestModel> GetOne(long id)
         {
-            return await _contestDalService.GetOne(id);
+            var model = await _contestDalService.GetOne(id);
+            return model;
+        }
+
+        public async Task<ContestManageViewModel> GetOneForManage(long id)
+        {
+            var model = await _contestDalService.GetOne(id);
+            var vm = _mapper.Map<ContestManageViewModel>(model);
+
+            var currentTasks = await _bpmEngineService.GetCurrentTasks(model.Id.ToString());
+            vm.Tasks = currentTasks.ToList();
+            return vm;
         }
 
         public async Task<IEnumerable<ContestModel>> GetAll(int page, int count)
@@ -75,7 +89,7 @@ namespace Contestor.Service.Services
 
         public async Task<Dictionary<string, string>> GetProcessesDictionary()
         {
-            var businessProcesses = (await _bpmEngineService.GetLatestVersionProcesses()).ToList();
+            var businessProcesses = (await _bpmEngineService.GetProcessesLatestVersions()).ToList();
             return businessProcesses.ToDictionary(x => x.Id, x => x.Name);
         }
 
@@ -83,10 +97,11 @@ namespace Contestor.Service.Services
         {
             var contest = await _contestDalService.GetOne(contestId);
 
-            var startProcessModel = new StartProcessModel { ProcessId = contest.ProcessKey, BusinessKey = contest.Id.ToString() };
+            var startProcessModel = new StartingProcessModel { ProcessId = contest.ProcessKey, BusinessKey = contest.Id.ToString() };
 
-            var process = await _bpmEngineService.StartProcess(startProcessModel);
             await _contestDalService.SetStatus(contestId, ContestStatus.Started);
+            var process = await _bpmEngineService.StartProcess(startProcessModel);
+
             return process;
         }
 
@@ -98,6 +113,11 @@ namespace Contestor.Service.Services
         public async Task<ParticipantModel> GetParticipant(long contestId, long userId)
         {
             return await _contestDalService.GetParticipant(contestId, userId);
+        }
+
+        public async Task<int> GetParticipantsCount(long contestId)
+        {
+            return await _contestDalService.GetParticipantsCount(contestId);
         }
 
         public async Task SendWork(WorkModel model)
@@ -112,6 +132,19 @@ namespace Contestor.Service.Services
             model.ParticipantId = model.ParticipantId;
 
             await _contestDalService.SendWork(model);
+        }
+
+        public async Task CompleteTask(CompletingTaskViewModel model)
+        {
+            var currentTask = await _bpmEngineService.GetTask(model.TaskId);
+
+            var completingTask = new CompletingTaskModel
+            {
+                TaskId = currentTask.Id,
+                ActionId = model.ActionId
+            };
+
+            await _bpmEngineService.CompleteTask(completingTask);
         }
     }
 }

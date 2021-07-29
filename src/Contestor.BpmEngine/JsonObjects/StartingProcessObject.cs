@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Contestor.BpmEngine.JsonObjects
 {
-    public class StartProcessObject
+    public class StartingProcessObject
     {
-        public StartProcessObject(string businessKey)
+        public StartingProcessObject(string businessKey)
         {
             BusinessKey = businessKey;
             Variables = new Dictionary<string, VariableObject>();

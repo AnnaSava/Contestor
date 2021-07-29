@@ -193,6 +193,11 @@ namespace Contestor.Data.Services
             return _mapper.Map<ParticipantModel>(entity);
         }
 
+        public async Task<int> GetParticipantsCount(long contestId)
+        {
+            return await _dbContext.Participants.CountAsync(m => m.ContestId == contestId);
+        }
+
         public async Task SendWork(WorkModel model)
         {
             var entity = _mapper.Map<Work>(model);

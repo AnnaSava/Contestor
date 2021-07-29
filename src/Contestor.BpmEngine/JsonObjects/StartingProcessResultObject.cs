@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Contestor.BpmEngine.JsonObjects
 {
-   public class StartProcessResultObject
+   public class StartingProcessResultObject
     {
         public string Id { get; set; }
     }

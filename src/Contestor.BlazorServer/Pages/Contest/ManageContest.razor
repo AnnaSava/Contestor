@@ -1,0 +1,53 @@
+﻿@page "/Start/{Id}"
+@using Contestor.Data.Contract
+@using Contestor.Service.Contract
+@inject IContestService contestService
+@inject NavigationManager NavigationManager
+
+<h3>ManageContest @obj.Title</h3>
+
+@if (obj.Status == ContestStatus.Draft)
+{
+    <form>
+        <input type="button" class="btn btn-primary" @onclick="@StartContestProcess" value="Start" />
+    </form>
+}
+
+@if (obj.Tasks != null && obj.Tasks.Count() > 0)
+{
+    foreach (var task in obj.Tasks)
+    {
+        foreach (var action in task.AvailableActions)
+        {
+            <input type="button" class="btn btn-primary" @onclick="() => ExecTaskAction(task.Id, action.Key)" value="@action.Value" />
+        }
+    }
+}
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    ContestManageViewModel obj = new ContestManageViewModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        obj = await Task.Run(() => contestService.GetOneForManage(Convert.ToInt64(Id)));
+    }
+
+    protected async void StartContestProcess()
+    {
+        await contestService.StartContestProcess(obj.Id);
+        NavigationManager.NavigateTo("Contests");
+    }
+
+    protected async void ExecTaskAction(string taskId, int actionId)
+    {
+        var model = new CompletingTaskViewModel
+        {
+            ActionId = actionId,
+            TaskId = taskId
+        };
+
+        await contestService.CompleteTask(model);
+    }
+}

@@ -6,6 +6,7 @@ using Contestor.Data.Contract.Interfaces;
 using Contestor.Data.Mapper;
 using Contestor.Data.Services;
 using Contestor.Service.Contract;
+using Contestor.Service.Mapper;
 using Contestor.Service.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,6 +46,7 @@ namespace Contestor.BpmEngine.Api
 
             var mappingConfig = new MapperConfiguration(mc =>
             {
+                mc.AddProfile(new ContestDataMapperProfile());
                 mc.AddProfile(new ContestMapperProfile());
             });
 
@@ -63,7 +65,8 @@ namespace Contestor.BpmEngine.Api
 
             services.AddScoped<IContestService>(s => new ContestService(
                 s.GetService<IContestDalService>(),
-                s.GetService<IBpmEngineClient>()));
+                s.GetService<IBpmEngineClient>(),
+                s.GetService<IMapper>()));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

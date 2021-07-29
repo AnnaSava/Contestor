@@ -9,6 +9,7 @@ using Contestor.Data.Entities;
 using Contestor.Data.Mapper;
 using Contestor.Data.Services;
 using Contestor.Service.Contract;
+using Contestor.Service.Mapper;
 using Contestor.Service.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
@@ -64,6 +65,7 @@ namespace Contestor.BlazorServer
 
             var mappingConfig = new MapperConfiguration(mc =>
             {
+                mc.AddProfile(new ContestDataMapperProfile());
                 mc.AddProfile(new ContestMapperProfile());
             });
 
@@ -86,7 +88,8 @@ namespace Contestor.BlazorServer
 
             services.AddScoped<IContestService>(s => new ContestService(
                 s.GetService<IContestDalService>(),
-                s.GetService<IBpmEngineClient>()));
+                s.GetService<IBpmEngineClient>(),
+                s.GetService<IMapper>()));
 
             services.AddScoped<IUserDalService>(s => new UserDalService(
                 s.GetService<UserManager<User>>(),

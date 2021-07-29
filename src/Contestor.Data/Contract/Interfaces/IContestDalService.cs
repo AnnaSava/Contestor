@@ -27,6 +27,8 @@ namespace Contestor.Data.Contract.Interfaces
 
         Task<IEnumerable<ParticipantModel>> GetAllParticipants(long contestId, int page, int count);
 
+        Task<int> GetParticipantsCount(long contestId);
+
         Task<WorkModel> CreateWork(WorkModel model);
 
         Task<IEnumerable<WorkModel>> GetAllWorks(long contestId, int page, int count);
