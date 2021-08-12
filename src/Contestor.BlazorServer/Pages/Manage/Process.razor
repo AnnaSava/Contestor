@@ -24,14 +24,31 @@
     }
 }
 
-@code {
-    [Parameter]
-    public string Id { get; set; }
-    ContestManageViewModel obj = new ContestManageViewModel();
+@if(WorksWithScore?.Count() > 0)
+{
+<table class="table">
+    @foreach(var work in WorksWithScore)
+    {
+        <tr>
+            <td>@work.Work.Title</td>
+            <td>@work.Score</td>
+        </tr>
+    }
+</table>
+}
 
-    protected override async Task OnInitializedAsync()
+@code {
+        [Parameter]
+        public string Id { get; set; }
+        ContestManageViewModel obj = new ContestManageViewModel();
+
+        IEnumerable<WorkWithScoreModel> WorksWithScore = new List<WorkWithScoreModel>();
+
+protected override async Task OnInitializedAsync()
     {
         obj = await Task.Run(() => contestService.GetOneForManage(Convert.ToInt64(Id)));
+
+        WorksWithScore = await contestService.GetTopVotedWorks(long.Parse(Id));
     }
 
     protected async void StartContestProcess()

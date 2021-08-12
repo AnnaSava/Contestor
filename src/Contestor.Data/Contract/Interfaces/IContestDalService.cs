@@ -46,5 +46,7 @@ namespace Contestor.Data.Contract.Interfaces
         Task SendWork(WorkModel model);
 
         Task Vote(long voterId, long workId, int points = 1);
+
+        Task<IEnumerable<WorkWithScoreModel>> GetTopVotedWorks(long contestId, int worksCount = 3);
     }
 }

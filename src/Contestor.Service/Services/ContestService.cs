@@ -176,5 +176,11 @@ namespace Contestor.Service.Services
         {
             await _contestDalService.Vote(voterId, workId);
         }
+
+        public async Task<IEnumerable<WorkWithScoreModel>> GetTopVotedWorks(long contestId)
+        {
+            //TODO мапить во вью-модели
+            return await _contestDalService.GetTopVotedWorks(contestId);
+        }
     }
 }

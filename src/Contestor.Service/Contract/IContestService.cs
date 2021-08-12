@@ -1,4 +1,5 @@
-﻿using Contestor.Data.Contract.Models;
+﻿using Contestor.Data.Contract;
+using Contestor.Data.Contract.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,5 +51,7 @@ namespace Contestor.Service.Contract
         Task<IEnumerable<WorkModel>> GetAllWorks(long contestId);
 
         Task Vote(long voterId, long workId);
+
+        Task<IEnumerable<WorkWithScoreModel>> GetTopVotedWorks(long contestId);
     }
 }

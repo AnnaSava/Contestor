@@ -252,6 +252,24 @@ namespace Contestor.Data.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<WorkWithScoreModel>> GetTopVotedWorks(long contestId, int worksCount = 3)
+        {
+            var wv = await _dbContext.Votes
+                  .Join(_dbContext.Works,
+                  v => v.WorkId,
+                  w => w.Id,
+                  (v, w) => new { Work = w, Vote = v })
+                  .Where(m => m.Work.ContestId == contestId)
+                  .ToListAsync();
+
+            var res = wv.GroupBy(m => m.Work)
+                .Select(m => new WorkWithScoreModel { Work = _mapper.Map<WorkModel>(m.Key), Score = m.Sum(s => s.Vote.Points) })
+                .OrderByDescending(m => m.Score)
+                .Take(worksCount);
+
+            return res;
+        }
+
         private async Task LogContest(long contestId, string action, string value = null, string message = null)
         {
             var log = new ContestLog
