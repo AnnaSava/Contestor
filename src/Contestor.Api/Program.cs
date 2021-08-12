@@ -13,6 +13,10 @@ namespace Contestor.BpmEngine.Api
     {
         public static void Main(string[] args)
         {
+            // Если падает ошибка System.Net.Sockets.SocketException, зайти в cmd, ipconfig /all
+            // посмотреть IPv4-адрес у Hyper-V Virtual Ethernet Adapter и вбить его в appsettings и launchsettings
+            // И не забыть поменять этот адрес в БП
+
             CreateHostBuilder(args).Build().Run();
         }
 

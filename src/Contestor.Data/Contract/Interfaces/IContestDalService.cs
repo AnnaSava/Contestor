@@ -23,20 +23,28 @@ namespace Contestor.Data.Contract.Interfaces
 
         Task<IEnumerable<ContestModel>> GetAllForNewParticipants(long visitorId, int page, int count);
 
+        Task<IEnumerable<ContestModel>> GetAllForVoting();
+
         Task<ParticipantModel> CreateParticipant(ParticipantModel model);
 
         Task<IEnumerable<ParticipantModel>> GetAllParticipants(long contestId, int page, int count);
 
         Task<int> GetParticipantsCount(long contestId);
 
+        Task<int> GetParticipantsHavingWorkCount(long contestId);
+
         Task<WorkModel> CreateWork(WorkModel model);
 
         Task<IEnumerable<WorkModel>> GetAllWorks(long contestId, int page, int count);
+
+        Task<IEnumerable<WorkModel>> GetAllWorks(long contestId);
 
         Task RegisterParticipant(long contestId, long userId);
 
         Task<ParticipantModel> GetParticipant(long contestId, long userId);
 
         Task SendWork(WorkModel model);
+
+        Task Vote(long voterId, long workId, int points = 1);
     }
 }

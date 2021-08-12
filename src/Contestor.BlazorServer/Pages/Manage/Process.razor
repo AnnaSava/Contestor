@@ -1,15 +1,15 @@
-﻿@page "/Start/{Id}"
+﻿@page "/manage/contest/process/{Id}"
 @using Contestor.Data.Contract
 @using Contestor.Service.Contract
 @inject IContestService contestService
 @inject NavigationManager NavigationManager
 
-<h3>ManageContest @obj.Title</h3>
+<h3>@obj.Title - управление</h3>
 
 @if (obj.Status == ContestStatus.Draft)
 {
     <form>
-        <input type="button" class="btn btn-primary" @onclick="@StartContestProcess" value="Start" />
+        <input type="button" class="btn btn-primary" @onclick="@StartContestProcess" value="Начать конкурс" />
     </form>
 }
 
@@ -37,7 +37,7 @@
     protected async void StartContestProcess()
     {
         await contestService.StartContestProcess(obj.Id);
-        NavigationManager.NavigateTo("Contests");
+        NavigationManager.NavigateTo("/manage/contest");
     }
 
     protected async void ExecTaskAction(string taskId, int actionId)

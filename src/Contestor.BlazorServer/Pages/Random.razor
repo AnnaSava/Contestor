@@ -1,0 +1,20 @@
+﻿@page "/random" 
+
+<h1>Великий рандом</h1>
+
+@if (randomNumber != 0)
+{
+    <p>Число: @randomNumber</p>
+}
+
+<button class="btn btn-primary" @onclick="GetRandom">Сгенерировать</button>
+
+@code {
+    private int randomNumber = 0;
+
+    private void GetRandom()
+    {
+        var rand = new System.Random();
+        randomNumber = rand.Next();
+    }
+}

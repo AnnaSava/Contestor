@@ -21,6 +21,8 @@ namespace Contestor.Data
 
         public DbSet<ContestLog> ContestLogs { get; set; }
 
+        public DbSet<Vote> Votes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -47,6 +49,19 @@ namespace Contestor.Data
                 .HasOne(m => m.Contest)
                 .WithMany(m => m.Works)
                 .HasForeignKey(m => m.ContestId);
+
+            builder.Entity<Vote>()
+                .HasOne(m => m.Voter)
+                .WithMany(m => m.Votes)
+                .HasForeignKey(m => m.VoterId);
+
+            builder.Entity<Vote>()
+                .HasOne(m => m.Work)
+                .WithMany(m => m.Votes)
+                .HasForeignKey(m => m.WorkId);
+
+            builder.Entity<Vote>()
+                .HasKey(m => new { m.VoterId, m.WorkId });
         }
     }
 }

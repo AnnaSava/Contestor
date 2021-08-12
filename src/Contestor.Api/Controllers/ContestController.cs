@@ -60,5 +60,12 @@ namespace Contestor.BpmEngine.Api.Controllers
         {
             return await _contestService.GetParticipantsCount(contestId);
         }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<int> GetParticipantsHavingWorkCount(long contestId)
+        {
+            return await _contestService.GetParticipantsHavingWorkCount(contestId);
+        }
     }
 }

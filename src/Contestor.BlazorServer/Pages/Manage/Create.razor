@@ -1,28 +1,28 @@
-﻿@page "/AddContest"
+﻿@page "/manage/contest/create"
 @using Contestor.Service.Contract
 @using Contestor.Data.Contract.Models
 @using Contestor.BpmEngine.Contract
 @inject IContestService contestService
 @inject NavigationManager NavigationManager
 
-<h3>Add Contest</h3>
+<h3>Создать новый конкурс</h3>
 <hr />
 
 <form>
     <div class="row">
         <div class="col-md-8">
             <div class="form-group">
-                <label for="Title" class="control-label">Title</label>
+                <label for="Title" class="control-label">Название</label>
                 <input form="Title" class="form-control" @bind="@obj.Title" />
             </div>
             <div class="form-group">
-                <label for="Description" class="control-label">Description</label>
+                <label for="Description" class="control-label">Описание</label>
                 <input form="Description" class="form-control" @bind="@obj.Description" />
             </div>
             <div class="form-group">
                 <label for="ProcessKey" class="control-label"></label>
                 <select @bind="@obj.ProcessKey" class="form-control">
-                    <option value="">Select Process</option>
+                    <option value="">Выбрать схему</option>
                     @if(ProcessesDict != null)
                     @foreach (var process in ProcessesDict)
                     {
@@ -54,10 +54,10 @@
     protected async void CreateContest()
     {
         await contestService.Create(obj);
-        NavigationManager.NavigateTo("Contests");
+        NavigationManager.NavigateTo("/manage/contest");
     }
     void Cancel()
     {
-        NavigationManager.NavigateTo("Contests");
+        NavigationManager.NavigateTo("/manage/contest");
     }
 }

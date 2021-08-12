@@ -87,6 +87,11 @@ namespace Contestor.Service.Services
             return await _contestDalService.GetAllForNewParticipants(visitorId, page, count);
         }
 
+        public async Task<IEnumerable<ContestModel>> GetAllForVoting()
+        {
+            return await _contestDalService.GetAllForVoting();
+        }
+
         public async Task<Dictionary<string, string>> GetProcessesDictionary()
         {
             var businessProcesses = (await _bpmEngineService.GetProcessesLatestVersions()).ToList();
@@ -100,9 +105,19 @@ namespace Contestor.Service.Services
             var startProcessModel = new StartingProcessModel { ProcessId = contest.ProcessKey, BusinessKey = contest.Id.ToString() };
 
             await _contestDalService.SetStatus(contestId, ContestStatus.Started);
-            var process = await _bpmEngineService.StartProcess(startProcessModel);
 
-            return process;
+            try
+            {
+                var process = await _bpmEngineService.StartProcess(startProcessModel);
+
+                return process;
+            }
+            catch(Exception ex)
+            {
+                await _contestDalService.SetStatus(contestId, ContestStatus.Draft);
+            }
+
+            return null;
         }
 
         public async Task RegisterParticipant(long contestId, long userId)
@@ -118,6 +133,11 @@ namespace Contestor.Service.Services
         public async Task<int> GetParticipantsCount(long contestId)
         {
             return await _contestDalService.GetParticipantsCount(contestId);
+        }
+
+        public async Task<int> GetParticipantsHavingWorkCount(long contestId)
+        {
+            return await _contestDalService.GetParticipantsHavingWorkCount(contestId);
         }
 
         public async Task SendWork(WorkModel model)
@@ -145,6 +165,16 @@ namespace Contestor.Service.Services
             };
 
             await _bpmEngineService.CompleteTask(completingTask);
+        }
+
+        public async Task<IEnumerable<WorkModel>> GetAllWorks(long contestId)
+        {
+            return await _contestDalService.GetAllWorks(contestId);
+        }
+
+        public async Task Vote(long voterId, long workId)
+        {
+            await _contestDalService.Vote(voterId, workId);
         }
     }
 }

@@ -129,6 +129,17 @@ namespace Contestor.Data.Services
             return contests;
         }
 
+        public async Task<IEnumerable<ContestModel>> GetAllForVoting()
+        {
+            // TODO фильтровать жюри. Пока голосовать могут все.
+
+            return await _dbContext.Contests
+                .Where(m => m.Status == ContestStatus.Voting)
+                .AsNoTracking()
+                .ProjectTo<ContestModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
         public async Task<ParticipantModel> CreateParticipant(ParticipantModel model)
         {
             var entity = _mapper.Map<Participant>(model);
@@ -198,6 +209,15 @@ namespace Contestor.Data.Services
             return await _dbContext.Participants.CountAsync(m => m.ContestId == contestId);
         }
 
+        public async Task<int> GetParticipantsHavingWorkCount(long contestId)
+        {
+            return await _dbContext.Works
+                .Where(m => m.ContestId == contestId)
+                .Select(m => m.ParticipantId)
+                .Distinct()
+                .CountAsync();
+        }
+
         public async Task SendWork(WorkModel model)
         {
             var entity = _mapper.Map<Work>(model);
@@ -208,6 +228,27 @@ namespace Contestor.Data.Services
 
             if (participant == null) throw new Exception($"Participant {model.ParticipantId} not found for contest {model.ContestId}");
             participant.WorksCount++;
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<WorkModel>> GetAllWorks(long contestId)
+        {
+            return await _dbContext.Works.Where(m => m.ContestId == contestId)
+                .AsNoTracking()
+                .ProjectTo<WorkModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task Vote(long voterId, long workId, int points = 1)
+        {
+            var vote = new Vote
+            {
+                VoterId = voterId,
+                WorkId = workId,
+                Points = points
+            };
+
+            _dbContext.Votes.Add(vote);
             await _dbContext.SaveChangesAsync();
         }
 

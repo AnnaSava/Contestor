@@ -29,6 +29,8 @@ namespace Contestor.Service.Contract
 
         Task<IEnumerable<ContestModel>> GetAllForNewParticipants(long visitorId, int page, int count);
 
+        Task<IEnumerable<ContestModel>> GetAllForVoting();
+
         Task<Dictionary<string, string>> GetProcessesDictionary();
 
         Task<string> StartContestProcess(long contestId);
@@ -39,8 +41,14 @@ namespace Contestor.Service.Contract
 
         Task<int> GetParticipantsCount(long contestId);
 
+        Task<int> GetParticipantsHavingWorkCount(long contestId);
+
         Task SendWork(WorkModel model);
 
         Task CompleteTask(CompletingTaskViewModel model);
+
+        Task<IEnumerable<WorkModel>> GetAllWorks(long contestId);
+
+        Task Vote(long voterId, long workId);
     }
 }
