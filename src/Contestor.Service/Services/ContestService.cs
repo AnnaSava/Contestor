@@ -167,9 +167,20 @@ namespace Contestor.Service.Services
             await _bpmEngineService.CompleteTask(completingTask);
         }
 
-        public async Task<IEnumerable<WorkModel>> GetAllWorks(long contestId)
+        public async Task<IEnumerable<WorkForVoteViewModel>> GetAllWorks(long contestId, long visitorId)
         {
-            return await _contestDalService.GetAllWorks(contestId);
+            var works = await _contestDalService.GetAllWorksWithVotes(contestId);
+
+            var vmWorks = new List<WorkForVoteViewModel>();
+
+           foreach(var work in works)
+            {
+                var vmWork = _mapper.Map<WorkForVoteViewModel>(work);
+                vmWork.VisitorHasVoted = work.Votes.Any(m => m.VoterId == visitorId);
+                vmWork.VisitorIsAuthor = work.ParticipantId == visitorId;
+                vmWorks.Add(vmWork);
+            }
+            return vmWorks;
         }
 
         public async Task Vote(long voterId, long workId)

@@ -48,7 +48,7 @@ namespace Contestor.Service.Contract
 
         Task CompleteTask(CompletingTaskViewModel model);
 
-        Task<IEnumerable<WorkModel>> GetAllWorks(long contestId);
+        Task<IEnumerable<WorkForVoteViewModel>> GetAllWorks(long contestId, long visitorId);
 
         Task Vote(long voterId, long workId);
 

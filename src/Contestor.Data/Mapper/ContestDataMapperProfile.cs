@@ -29,6 +29,12 @@ namespace Contestor.Data.Mapper
 
             CreateMap<Work, WorkModel>();
             CreateMap<WorkModel, Work>();
+
+            CreateMap<Work, WorkWithVotesModel>();
+            CreateMap<WorkWithVotesModel, Work>();
+
+            CreateMap<Vote, VoteModel>();
+            CreateMap<VoteModel, Vote>();
         }
     }
 }

@@ -21,7 +21,18 @@ else
             <tr>
                 <td>@work.Title</td>
                 <td>
-                    <input type="button" class="btn btn-primary" @onclick="() => VoteForWork(work.Id)" value="Проголосовать" />
+                    @if(work.VisitorIsAuthor)
+                    {
+                        <span>Вы автор этой работы</span>
+                    }
+                    else if (work.VisitorHasVoted)
+                    {
+                        <span>Вы уже проголосовали</span>
+                    }
+                    else
+                    {
+                    <input type="button" class="btn btn-primary" @onclick="() => VoteForWork(work)" value="Проголосовать" />
+                    }
                 </td>
             </tr>
         }
@@ -30,25 +41,35 @@ else
 
 
 @code {
-        [Parameter]
-        public string Id { get; set; }
-        ContestModel obj = new ContestModel();
+    [Parameter]
+    public string Id { get; set; }
+    ContestModel obj = new ContestModel();
 
-        IEnumerable<WorkModel> Works = new List<WorkModel>();
+    IEnumerable<WorkForVoteViewModel> Works = new List<WorkForVoteViewModel>();
+
+    public long UserId;
 
     protected override async Task OnInitializedAsync()
-    {
-        obj = await Task.Run(() => contestService.GetOne(Convert.ToInt64(Id)));
-        Works = await contestService.GetAllWorks(long.Parse(Id));
-    }
-
-    protected async void VoteForWork(long workId)
     {
         var authstate = await authProvider.GetAuthenticationStateAsync();
         var user = authstate.User;
 
-        var id = long.Parse(user.FindFirst(ClaimTypes.NameIdentifier).Value);
+        UserId = long.Parse(user.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-        await contestService.Vote(id, workId);
+        obj = await Task.Run(() => contestService.GetOne(Convert.ToInt64(Id)));
+        Works = await contestService.GetAllWorks(long.Parse(Id), UserId);
+    }
+
+    protected async void VoteForWork(WorkForVoteViewModel work)
+    {
+        //var authstate = await authProvider.GetAuthenticationStateAsync();
+        //var user = authstate.User;
+
+        //var id = long.Parse(user.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+        await contestService.Vote(UserId, work.Id);
+
+        work.VisitorHasVoted = true;
+        StateHasChanged();
     }
 }

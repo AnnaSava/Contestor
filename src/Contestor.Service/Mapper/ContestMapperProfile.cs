@@ -15,6 +15,8 @@ namespace Contestor.Service.Mapper
         {
             CreateMap<ContestModel, ContestManageViewModel>();
             CreateMap<ContestManageViewModel, ContestModel>();
+
+            CreateMap<WorkWithVotesModel, WorkForVoteViewModel>();
         }
     }
 }

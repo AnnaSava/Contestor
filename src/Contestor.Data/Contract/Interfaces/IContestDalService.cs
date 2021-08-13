@@ -39,6 +39,8 @@ namespace Contestor.Data.Contract.Interfaces
 
         Task<IEnumerable<WorkModel>> GetAllWorks(long contestId);
 
+        Task<IEnumerable<WorkWithVotesModel>> GetAllWorksWithVotes(long contestId);
+
         Task RegisterParticipant(long contestId, long userId);
 
         Task<ParticipantModel> GetParticipant(long contestId, long userId);

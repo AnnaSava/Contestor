@@ -239,8 +239,24 @@ namespace Contestor.Data.Services
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<WorkWithVotesModel>> GetAllWorksWithVotes(long contestId)
+        {
+            return await _dbContext.Works
+                 .Where(m => m.ContestId == contestId)
+                 .Include(m => m.Votes)
+                 .ProjectTo<WorkWithVotesModel>(_mapper.ConfigurationProvider)
+                 .ToListAsync();
+        }
+
         public async Task Vote(long voterId, long workId, int points = 1)
         {
+            // TODO решить, в сервисе какого уровня должна быть эта проверка
+            var work = await _dbContext.Works.Include(m => m.Votes).FirstOrDefaultAsync(m => m.Id == workId);
+            if (work.ParticipantId == voterId) throw new Exception("you can't vote for yourself");
+
+            // TODO и эта. В отличие от первого случая здесь будет эксепшен в БД при попытке добавить уже существующий PK
+            if (work.Votes.Any(m => m.VoterId == voterId)) throw new Exception("you have already voted");
+
             var vote = new Vote
             {
                 VoterId = voterId,
