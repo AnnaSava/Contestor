@@ -92,6 +92,11 @@ namespace Contestor.Service.Services
             return await _contestDalService.GetAllForVoting();
         }
 
+        public async Task<IEnumerable<ContestModel>> GetTopForVoting(long visitorId)
+        {
+            return await _contestDalService.GetTopForVoting(visitorId);
+        }
+
         public async Task<Dictionary<string, string>> GetProcessesDictionary()
         {
             var businessProcesses = (await _bpmEngineService.GetProcessesLatestVersions()).ToList();

@@ -5,27 +5,34 @@
 @inject IContestService contestService
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 
-<h2>Конкурсы</h2>
-
-<h3>На голосовании</h3>
-@if (ContestsList is null)
+<h3>Конкурсы на голосовании</h3>
+@if (VotingContestsList is null)
 {
-    <p><em>Загрузка... !</em></p>
+    <p><em>Загрузка...</em></p>
 }
 else
 {
-                <table class="table">
-                    @foreach (var contest in VotingContestsList)
-                    {
-                    <tr>
-                        <td>@contest.Title</td>
-                        <td><a class="nav-link" href="/contest/@contest.Id/vote">
+    <table class="table">
+        @foreach (var contest in VotingContestsList)
+        {
+            <tr>
+                <td>@contest.Title</td>
+                <td>
+                    <AuthorizeView>
+                        <Authorized>
+                            <a class="nav-link" href="/contest/@contest.Id/vote">
                                 <span class="oi oi-pencil" aria-hidden="true">Голосовать</span>
                             </a>
-                        </td>
-                    </tr>
-                    }
-                </table>
+                        </Authorized>
+                    </AuthorizeView>
+                </td>
+            </tr>
+        }
+    </table>
+
+    <a class="nav-link" href="/voting">
+        <span class="oi oi-pencil" aria-hidden="true">Все голосования</span>
+    </a>
 }
 
 
@@ -33,7 +40,7 @@ else
 
 @if (ContestsList is null)
 {
-    <p><em>Загрузка... !</em></p>
+    <p><em>Загрузка...</em></p>
 }
 else
 {
@@ -141,6 +148,6 @@ else
         }
 
         ContestsList = (await contestService.GetAllForNewParticipants(id, 1, 10)).ToList();
-        VotingContestsList = (await contestService.GetAllForVoting()).ToList();
+        VotingContestsList = (await contestService.GetTopForVoting(id)).ToList();
     }
 }

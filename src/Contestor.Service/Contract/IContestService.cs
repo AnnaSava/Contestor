@@ -32,6 +32,8 @@ namespace Contestor.Service.Contract
 
         Task<IEnumerable<ContestModel>> GetAllForVoting();
 
+        Task<IEnumerable<ContestModel>> GetTopForVoting(long visitorId);
+
         Task<Dictionary<string, string>> GetProcessesDictionary();
 
         Task<string> StartContestProcess(long contestId);

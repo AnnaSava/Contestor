@@ -129,12 +129,27 @@ namespace Contestor.Data.Services
             return contests;
         }
 
-        public async Task<IEnumerable<ContestModel>> GetAllForVoting()
+        public async Task<IEnumerable<ContestModel>> GetAllForVoting(int count =100)
         {
             // TODO фильтровать жюри. Пока голосовать могут все.
 
             return await _dbContext.Contests
                 .Where(m => m.Status == ContestStatus.Voting)
+                .Take(count)
+                .AsNoTracking()
+                .ProjectTo<ContestModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<ContestModel>> GetTopForVoting(long visitorId, int count = 3)
+        {
+            if (visitorId == 0) return await GetAllForVoting(count);
+
+            // Не показываем те конкурсы, в которых пользователь уже проголосовал
+            return await _dbContext.Contests.Include(m => m.Works).ThenInclude(m => m.Votes)
+                .Where(m => m.Status == ContestStatus.Voting)
+                .Where(m => m.Works.SelectMany(m => m.Votes).Select(m => m.VoterId).Contains(visitorId) == false)
+                .Take(count)
                 .AsNoTracking()
                 .ProjectTo<ContestModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();

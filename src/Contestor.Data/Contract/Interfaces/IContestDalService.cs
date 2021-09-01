@@ -23,7 +23,9 @@ namespace Contestor.Data.Contract.Interfaces
 
         Task<IEnumerable<ContestModel>> GetAllForNewParticipants(long visitorId, int page, int count);
 
-        Task<IEnumerable<ContestModel>> GetAllForVoting();
+        Task<IEnumerable<ContestModel>> GetAllForVoting(int count = 100);
+
+        Task<IEnumerable<ContestModel>> GetTopForVoting(long visitorId, int count = 3);
 
         Task<ParticipantModel> CreateParticipant(ParticipantModel model);
 
