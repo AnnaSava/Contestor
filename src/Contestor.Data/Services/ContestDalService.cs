@@ -65,6 +65,26 @@ namespace Contestor.Data.Services
             return _mapper.Map<ContestModel>(entity);
         }
 
+        public async Task<ContestModel> GetOne(long id, long visitorId)
+        {
+            var entity = await _dbContext.Contests
+                .Where(m => m.Id == id)
+                .Include(m => m.Participants)
+                .Include(m => m.Works)
+                .FirstOrDefaultAsync();
+
+            var model = _mapper.Map<ContestModel>(entity);
+
+            if (entity.Participants.Select(m => m.UserId).Contains(visitorId))
+            {
+                model.VisitorIsParticipant = true;
+            }
+
+            model.VisitorWorksCount = entity.Works.Count();
+
+            return model;
+        }
+
         public async Task<IEnumerable<ContestModel>> GetAll(int page, int count)
         {
             return await _dbContext.Contests
@@ -129,12 +149,13 @@ namespace Contestor.Data.Services
             return contests;
         }
 
-        public async Task<IEnumerable<ContestModel>> GetAllForVoting(int count =100)
+        public async Task<IEnumerable<ContestModel>> GetAllForVoting(int count = 100)
         {
             // TODO фильтровать жюри. Пока голосовать могут все.
 
             return await _dbContext.Contests
                 .Where(m => m.Status == ContestStatus.Voting)
+                .OrderBy(m => m.Id)
                 .Take(count)
                 .AsNoTracking()
                 .ProjectTo<ContestModel>(_mapper.ConfigurationProvider)
@@ -149,6 +170,7 @@ namespace Contestor.Data.Services
             return await _dbContext.Contests.Include(m => m.Works).ThenInclude(m => m.Votes)
                 .Where(m => m.Status == ContestStatus.Voting)
                 .Where(m => m.Works.SelectMany(m => m.Votes).Select(m => m.VoterId).Contains(visitorId) == false)
+                .OrderBy(m => m.Id)
                 .Take(count)
                 .AsNoTracking()
                 .ProjectTo<ContestModel>(_mapper.ConfigurationProvider)

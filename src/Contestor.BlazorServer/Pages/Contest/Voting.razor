@@ -5,8 +5,57 @@
 @inject IContestService contestService
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 
-<h3>Voting</h3>
+<h3>Голосование</h3>
+@if (VotingContestsList is null)
+{
+    <p><em>Загрузка...</em></p>
+}
+else
+{
+    <table class="table">
+        @foreach (var contest in VotingContestsList)
+        {
+            <tr>
+                <td>@contest.Title</td>
+                <td>
+                    <AuthorizeView>
+                        <Authorized>
+                            <a class="nav-link" href="/contest/@contest.Id/vote">
+                                <span class="oi oi-pencil" aria-hidden="true">Голосовать</span>
+                            </a>
+                        </Authorized>
+                    </AuthorizeView>
+                </td>
+            </tr>
+        }
+    </table>
+}
 
 @code {
+    string UserName = string.Empty;
+    private string _authMessage;
+    private string _surnameMessage;
+    private IEnumerable<Claim> _claims = Enumerable.Empty<Claim>();
+    List<ContestModel> VotingContestsList;
 
+    protected async override Task OnInitializedAsync()
+    {
+        var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        var user = authstate.User;
+
+        long id = 0;
+        if (user.Identity.IsAuthenticated)
+        {
+            _authMessage = $"{user.Identity.Name} is authenticated.";
+            _claims = user.Claims;
+            UserName = user.Identity.Name;
+            id = long.Parse(user.FindFirst(ClaimTypes.NameIdentifier).Value);
+        }
+        else
+        {
+            _authMessage = "The user is NOT authenticated.";
+        }
+
+        VotingContestsList = (await contestService.GetAllForVoting()).ToList();
+    }
 }

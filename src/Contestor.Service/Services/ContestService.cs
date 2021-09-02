@@ -67,6 +67,12 @@ namespace Contestor.Service.Services
             return model;
         }
 
+        public async Task<ContestModel> GetOne(long id, long visitorId)
+        {
+            var model = await _contestDalService.GetOne(id, visitorId);
+            return model;
+        }
+
         public async Task<ContestManageViewModel> GetOneForManage(long id)
         {
             var model = await _contestDalService.GetOne(id);

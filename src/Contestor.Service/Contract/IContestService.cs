@@ -24,6 +24,8 @@ namespace Contestor.Service.Contract
 
         Task<ContestModel> GetOne(long id);
 
+        Task<ContestModel> GetOne(long id, long visitorId);
+
         Task<ContestManageViewModel> GetOneForManage(long id);
 
         Task<IEnumerable<ContestModel>> GetAll(int page, int count);

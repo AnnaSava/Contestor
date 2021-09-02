@@ -35,7 +35,6 @@ else
     </a>
 }
 
-
 <h3>Актуальные конкурсы</h3>
 
 @if (ContestsList is null)
@@ -62,7 +61,11 @@ else
             {
                 <tr>
                     <td>@contest.Id</td>
-                    <td>@contest.Title</td>
+                    <td>
+                        <a class="nav-link" href="/contest/@contest.Id">
+                            <span aria-hidden="true">@contest.Title</span>
+                        </a>
+                    </td>
                     <td>@contest.Description</td>
                     <td>@contest.ProcessName</td>
                     <td>@contest.Status</td>

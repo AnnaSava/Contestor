@@ -6,29 +6,91 @@
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider authProvider
 
-<h3>Contest @obj.Title</h3>
+<h3>Contest @Contest.Title</h3>
 
-<p>@obj.Description</p>
+<p>Статус: @Contest.Status</p>
 
-<form>
-    <input type="button" class="btn btn-primary" @onclick="@Register" value="Принять участие" />
-</form>
+<p>@Contest.Description</p>
 
-<AuthorizeView>
-    <Authorized>
-        <a class="nav-link" href="SendWork/@Id">
-            <span class="oi oi-pencil" aria-hidden="true">Прислать работу</span>
-        </a>
-    </Authorized>
-</AuthorizeView>
+@if (Contest.Status == "regopen")
+{
+    <AuthorizeView>
+        <Authorized>
+            @if (Contest.VisitorIsParticipant == false)
+            {
+            <form>
+                <input type="button" class="btn btn-primary" @onclick="@Register" value="Принять участие" />
+            </form>
+            }
+            else
+            {
+            <p>Вы зарегистрированы на этот конкурс</p>
+            }
+        </Authorized>
+        <NotAuthorized>
+            <a class="nav-link" href="/Account/Register?contestId=@Contest.Id">
+                <span class="oi oi-pencil" aria-hidden="true">Принять участие</span>
+            </a>
+        </NotAuthorized>
+    </AuthorizeView>
+}
+
+@if (Contest.Status == "open")
+{
+    <AuthorizeView>
+        <Authorized>
+            @if (Contest.VisitorWorksCount < Contest.MaxWorksCount && (Contest.VisitorIsParticipant || Contest.AutoRegEnabled))
+            {
+            <a class="nav-link" href="SendWork/@Id">
+                <span class="oi oi-pencil" aria-hidden="true">Прислать работу</span>
+            </a>
+            }
+            @if (Contest.VisitorWorksCount >= Contest.MaxWorksCount)
+            {
+                        <p>Вы уже прислали допустимое количество работ</p>
+            }
+        </Authorized>
+        <NotAuthorized>
+            @if (Contest.AutoRegEnabled)
+            {
+                <a class="nav-link" href="/Account/Register?contestId=@Contest.Id&sendwork=@true">
+                    <span class="oi oi-pencil" aria-hidden="true">Прислать работу</span>
+                </a>
+            }
+        </NotAuthorized>
+    </AuthorizeView>
+}
+
+@if (Contest.Status == "voting")
+{
+    <AuthorizeView>
+        <Authorized>
+            <a class="nav-link" href="/contest/@Contest.Id/vote">
+                <span class="oi oi-pencil" aria-hidden="true">Голосовать</span>
+            </a>
+        </Authorized>
+    </AuthorizeView>
+}
 
 @code {
     [Parameter]
     public string Id { get; set; }
-    ContestModel obj = new ContestModel();
+    ContestModel Contest = new ContestModel();
     protected override async Task OnInitializedAsync()
     {
-        obj = await Task.Run(() => contestService.GetOne(Convert.ToInt64(Id)));
+        var authstate = await authProvider.GetAuthenticationStateAsync();
+        var user = authstate.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            var id = user.FindFirst(ClaimTypes.NameIdentifier);
+
+            Contest = await Task.Run(() => contestService.GetOne(Convert.ToInt64(Id), long.Parse(id.Value)));
+        }
+        else
+        {
+            Contest = await Task.Run(() => contestService.GetOne(Convert.ToInt64(Id)));
+        }
     }
 
     protected async void Register()
@@ -38,7 +100,10 @@
 
         var id = user.FindFirst(ClaimTypes.NameIdentifier);
 
-        await contestService.RegisterParticipant(obj.Id, long.Parse(id.Value));
-        NavigationManager.NavigateTo("Contest/" + Id);
+        await contestService.RegisterParticipant(Contest.Id, long.Parse(id.Value));
+        // NavigationManager.NavigateTo("Contest/" + Id);
+
+        Contest.VisitorIsParticipant = true;
+        StateHasChanged();
     }
 }

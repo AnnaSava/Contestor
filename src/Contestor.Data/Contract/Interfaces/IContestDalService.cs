@@ -17,6 +17,8 @@ namespace Contestor.Data.Contract.Interfaces
 
         Task<ContestModel> GetOne(long id);
 
+        Task<ContestModel> GetOne(long id, long visitorId);
+
         Task<IEnumerable<ContestModel>> GetAll(int page, int count);
 
         Task<IEnumerable<ContestModel>> GetAllByStatus(string status, int page, int count);
