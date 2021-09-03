@@ -41,7 +41,7 @@
         <Authorized>
             @if (Contest.VisitorWorksCount < Contest.MaxWorksCount && (Contest.VisitorIsParticipant || Contest.AutoRegEnabled))
             {
-            <a class="nav-link" href="SendWork/@Id">
+            <a class="nav-link" href="contest/@Id/sendwork">
                 <span class="oi oi-pencil" aria-hidden="true">Прислать работу</span>
             </a>
             }

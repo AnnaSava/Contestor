@@ -1,4 +1,4 @@
-﻿@page "/SendWork/{Id}"
+﻿@page "/contest/{Id}/sendwork"
 @using Contestor.Service.Contract
 @using Contestor.Data.Contract.Models
 @using System.Security.Claims
@@ -6,37 +6,50 @@
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider authProvider
 
-<h3>Send Work</h3>
+<h3>@Contest.Title - прислать работу</h3>
 
-<form>
-    <div class="row">
-        <div class="col-md-8">
-            <div class="form-group">
-                <label for="Title" class="control-label">Заголовок</label>
-                <input form="Title" class="form-control" @bind="@obj.Title" />
+<AuthorizeView>
+    <Authorized>
+        <form>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="Title" class="control-label">Заголовок</label>
+                        <input form="Title" class="form-control" @bind="@Work.Title" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Description" class="control-label">Содержание</label>
+                        <input form="Description" class="form-control" @bind="@Work.Content" />
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="Description" class="control-label">Содержание</label>
-                <input form="Description" class="form-control" @bind="@obj.Content" />
-            </div>
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-4">
-            <div class="form-group">
-                <input type="button" class="btn btn-primary" @onclick="@Send" value="Отправить" />
-                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Отмена" />
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="button" class="btn btn-primary" @onclick="@Send" value="Отправить" />
+                        <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Отмена" />
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</form>
+        </form>
+    </Authorized>
+    <NotAuthorized><span>Войдите на сайт, чтобы прислать работу</span></NotAuthorized>
+</AuthorizeView>
 
 @code {
     [Parameter]
     public string Id { get; set; }
 
-    WorkModel obj = new WorkModel();
+    ContestModel Contest = new ContestModel();
+
+    WorkModel Work = new WorkModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Contest = await Task.Run(() => contestService.GetOne(Convert.ToInt64(Id)));
+    }
+
     protected async void Send()
     {
         var authstate = await authProvider.GetAuthenticationStateAsync();
@@ -44,13 +57,14 @@
 
         var id = user.FindFirst(ClaimTypes.NameIdentifier);
 
-        obj.ParticipantId = long.Parse(id.Value);
-        obj.ContestId = Convert.ToInt64(Id);
-        await contestService.SendWork(obj);
-        NavigationManager.NavigateTo("Contests");
+        Work.ParticipantId = long.Parse(id.Value);
+        Work.ContestId = Convert.ToInt64(Id);
+        await contestService.SendWork(Work);
+        NavigationManager.NavigateTo("/");
     }
+
     void Cancel()
     {
-        NavigationManager.NavigateTo("Contests");
+        NavigationManager.NavigateTo("/");
     }
 }
