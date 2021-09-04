@@ -4,71 +4,56 @@
 @inject IContestService contestService
 @inject NavigationManager NavigationManager
 
-<h3>Конкурсы</h3>
+<h3>Конкурсы - управление</h3>
 
-<NavLink class="nav-link" href="/manage/contest/create">
-    <span class="oi oi-plus" aria-hidden="true">Создать новый конкурс</span>
-</NavLink>
+<AuthorizeView>
+    <Authorized>
+        <NavLink class="nav-link" href="/manage/contest/create">
+            <span class="oi oi-plus" aria-hidden="true">Создать новый конкурс</span>
+        </NavLink>
 
-@if (ContestsList is null)
-{
-    <p><em>Загрузка... !</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Название</th>
-                <th>Описание</th>
-                <th>Схема</th>
-                <th>Статус</th>
-                <th>AutoRegEnabled</th>
-                <th>MaxWorksCount</th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var contest in ContestsList)
-            {
-            <tr>
-                <td>@contest.Id</td>
-                <td>@contest.Title</td>
-                <td>@contest.Description</td>
-                <td>@contest.ProcessName</td>
-                <td>@contest.Status</td>
-                <td>@contest.AutoRegEnabled</td>
-                <td>@contest.MaxWorksCount</td>
-                <td>
-                    <a class="nav-link" href="/manage/contest/process/@contest.Id">
-                        <span class="oi oi-media-play" aria-hidden="true">Начать</span>
-                    </a>
-                </td>
-                <td>
-                    <a class="nav-link" href="EditContest/@contest.Id">
-                        <span class="oi oi-pencil" aria-hidden="true">Редактировать</span>
-                    </a>
-                </td>
-                <td>
-                    <a class="nav-link" href="Delete/@contest.Id">
-                        <span class="oi oi-trash" aria-hidden="true">Удалить</span>
-                    </a>
-                </td>
-            </tr>
-            }
-        </tbody>
-    </table>
-}
-
+        @if (ContestsList is null)
+        {
+            <p><em>Загрузка...</em></p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Название</th>
+                        <th>Описание</th>
+                        <th>Схема</th>
+                        <th>Статус</th>
+                        <th>AutoRegEnabled</th>
+                        <th>MaxWorksCount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var contest in ContestsList)
+                    {
+                        <tr>
+                            <td>@contest.Id</td>
+                            <td><a class="nav-link" href="/manage/contest/process/@contest.Id">@contest.Title</a></td>
+                            <td>@contest.Description</td>
+                            <td>@contest.ProcessName</td>
+                            <td>@contest.Status</td>
+                            <td>@contest.AutoRegEnabled</td>
+                            <td>@contest.MaxWorksCount</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </Authorized>
+</AuthorizeView>
 
 @code {
     List<ContestModel> ContestsList;
     protected override async Task OnInitializedAsync()
     {
-        var t = await contestService.GetAll(1, 10);
+        var t = await contestService.GetAll(1, 100);
         ContestsList = t.ToList();
     }
 }

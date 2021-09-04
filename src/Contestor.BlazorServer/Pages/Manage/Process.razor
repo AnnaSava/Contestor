@@ -4,56 +4,62 @@
 @inject IContestService contestService
 @inject NavigationManager NavigationManager
 
-<h3>@obj.Title - управление</h3>
+<h3>@Contest.Title - управление</h3>
+<h4>Status: @Contest.Status</h4>
+<hr />
 
-@if (obj.Status == ContestStatus.Draft)
-{
-    <form>
-        <input type="button" class="btn btn-primary" @onclick="@StartContestProcess" value="Начать конкурс" />
-    </form>
-}
-
-@if (obj.Tasks != null && obj.Tasks.Count() > 0)
-{
-    foreach (var task in obj.Tasks)
-    {
-        foreach (var action in task.AvailableActions)
+<AuthorizeView>
+    <Authorized>
+        @if (Contest.Status == ContestStatus.Draft)
         {
-            <input type="button" class="btn btn-primary" @onclick="() => ExecTaskAction(task.Id, action.Key)" value="@action.Value" />
+            <form>
+                <input type="button" class="btn btn-primary" @onclick="@StartContestProcess" value="Начать конкурс" />
+            </form>
         }
-    }
-}
 
-@if(WorksWithScore?.Count() > 0)
-{
-<table class="table">
-    @foreach(var work in WorksWithScore)
-    {
-        <tr>
-            <td>@work.Work.Title</td>
-            <td>@work.Score</td>
-        </tr>
-    }
-</table>
-}
+        @if (Contest.Tasks != null && Contest.Tasks.Count() > 0)
+        {
+            foreach (var task in Contest.Tasks)
+            {
+                foreach (var action in task.AvailableActions)
+                {
+                    <input type="button" class="btn btn-primary" @onclick="() => ExecTaskAction(task.Id, action.Key)" value="@action.Value" />
+                }
+            }
+        }
+
+        @if (WorksWithScore?.Count() > 0)
+        {
+            <table class="table">
+                @foreach (var work in WorksWithScore)
+                {
+                    <tr>
+                        <td>@work.Work.Title</td>
+                        <td>@work.Score</td>
+                    </tr>
+                }
+            </table>
+        }
+    </Authorized>
+</AuthorizeView>
 
 @code {
-        [Parameter]
-        public string Id { get; set; }
-        ContestManageViewModel obj = new ContestManageViewModel();
+    [Parameter]
+    public string Id { get; set; }
+    ContestManageViewModel Contest = new ContestManageViewModel();
 
-        IEnumerable<WorkWithScoreModel> WorksWithScore = new List<WorkWithScoreModel>();
+    IEnumerable<WorkWithScoreModel> WorksWithScore = new List<WorkWithScoreModel>();
 
-protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        obj = await Task.Run(() => contestService.GetOneForManage(Convert.ToInt64(Id)));
+        Contest = await Task.Run(() => contestService.GetOneForManage(Convert.ToInt64(Id)));
 
         WorksWithScore = await contestService.GetTopVotedWorks(long.Parse(Id));
     }
 
     protected async void StartContestProcess()
     {
-        await contestService.StartContestProcess(obj.Id);
+        await contestService.StartContestProcess(Contest.Id);
         NavigationManager.NavigateTo("/manage/contest");
     }
 
