@@ -21,6 +21,13 @@
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
+      "dotnetRunMessages": "true",
+      "applicationUrl": "http://172.16.8.8:5002"
+    },
+    "Contestor.Api-Dev": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

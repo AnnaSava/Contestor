@@ -1,27 +1,11 @@
-using AutoMapper;
-using Contestor.BpmEngine.Contract;
-using Contestor.BpmEngine.Service;
-using Contestor.Data;
-using Contestor.Data.Contract.Interfaces;
-using Contestor.Data.Mapper;
-using Contestor.Data.Services;
-using Contestor.Service.Contract;
-using Contestor.Service.Mapper;
-using Contestor.Service.Services;
+using Contestor.Api;
+using Contestor.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Contestor.BpmEngine.Api
 {
@@ -37,36 +21,9 @@ namespace Contestor.BpmEngine.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ContestDbContext>(options =>
-            {
-                options
-                    .UseNpgsql(Configuration.GetConnectionString("ContestConnection"), b => b.MigrationsAssembly("Contestor.Migrations.PostgreSql"))
-                    .UseSnakeCaseNamingConvention();
-            });
-
-            var mappingConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new ContestDataMapperProfile());
-                mc.AddProfile(new ContestMapperProfile());
-            });
-
-            IMapper mapper = mappingConfig.CreateMapper();
-            services.AddSingleton(mapper);
-
-            services.AddScoped<IContestDalService>(s => new ContestDalService(
-                s.GetService<ContestDbContext>(),
-                s.GetService<IMapper>()));
-
-            services.AddHttpClient<IBpmEngineClient, BpmEngineClient>(
-               client =>
-               {
-                   client.BaseAddress = new Uri(Configuration["BpmEngineUri"]);
-               });
-
-            services.AddScoped<IContestService>(s => new ContestService(
-                s.GetService<IContestDalService>(),
-                s.GetService<IBpmEngineClient>(),
-                s.GetService<IMapper>()));
+            services.AddMapper();
+            services.AddUser(Configuration);
+            services.AddContestor(Configuration);
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
