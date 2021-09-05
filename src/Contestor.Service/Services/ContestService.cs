@@ -165,7 +165,7 @@ namespace Contestor.Service.Services
             await _contestDalService.SendWork(model);
         }
 
-        public async Task CompleteTask(CompletingTaskViewModel model)
+        public async Task<bool> CompleteTask(CompletingTaskViewModel model)
         {
             var currentTask = await _bpmEngineService.GetTask(model.TaskId);
 
@@ -175,7 +175,15 @@ namespace Contestor.Service.Services
                 ActionId = model.ActionId
             };
 
-            await _bpmEngineService.CompleteTask(completingTask);
+            try
+            {
+                await _bpmEngineService.CompleteTask(completingTask);
+                return true;
+                    }
+            catch
+            {
+                return false;            }
+
         }
 
         public async Task<IEnumerable<WorkForVoteViewModel>> GetAllWorks(long contestId, long visitorId)

@@ -96,6 +96,7 @@ namespace Contestor.BpmEngine.Service
             var task = new TaskModel
             {
                 Id = historyTask.Id,
+                Name = historyTask.Name,
                 ProcessDefinitionId = historyTask.ProcessDefinitionId,
                 TaskDefinitionKey = historyTask.TaskDefinitionKey,
                 DueDate = historyTask.Due,

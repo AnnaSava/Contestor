@@ -50,7 +50,7 @@ namespace Contestor.Service.Contract
 
         Task SendWork(WorkModel model);
 
-        Task CompleteTask(CompletingTaskViewModel model);
+        Task<bool> CompleteTask(CompletingTaskViewModel model);
 
         Task<IEnumerable<WorkForVoteViewModel>> GetAllWorks(long contestId, long visitorId);
 

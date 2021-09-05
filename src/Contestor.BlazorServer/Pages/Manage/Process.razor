@@ -21,10 +21,12 @@
         {
             foreach (var task in Contest.Tasks)
             {
+                <p>@task.Name</p>
                 foreach (var action in task.AvailableActions)
                 {
                     <input type="button" class="btn btn-primary" @onclick="() => ExecTaskAction(task.Id, action.Key)" value="@action.Value" />
                 }
+                <hr />
             }
         }
 
@@ -44,11 +46,11 @@
 </AuthorizeView>
 
 @code {
-    [Parameter]
-    public string Id { get; set; }
-    ContestManageViewModel Contest = new ContestManageViewModel();
+        [Parameter]
+        public string Id { get; set; }
+        ContestManageViewModel Contest = new ContestManageViewModel();
 
-    IEnumerable<WorkWithScoreModel> WorksWithScore = new List<WorkWithScoreModel>();
+        IEnumerable<WorkWithScoreModel> WorksWithScore = new List<WorkWithScoreModel>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -71,6 +73,12 @@
             TaskId = taskId
         };
 
-        await contestService.CompleteTask(model);
+        var ok =  await contestService.CompleteTask(model);
+
+        if (ok)
+        {
+            Contest.Tasks.Remove(Contest.Tasks.First(m => m.Id == taskId));
+            StateHasChanged();
+        }
     }
 }
