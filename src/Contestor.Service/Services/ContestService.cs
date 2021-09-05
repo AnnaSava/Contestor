@@ -88,6 +88,11 @@ namespace Contestor.Service.Services
             return await _contestDalService.GetAll(page, count);
         }
 
+        public async Task<IEnumerable<ContestModel>> GetAllByUser(long userId, int page, int count)
+        {
+            return await _contestDalService.GetAllByUser(userId, page, count);
+        }
+
         public async Task<IEnumerable<ContestModel>> GetAllForNewParticipants(long visitorId, int page, int count)
         {
             return await _contestDalService.GetAllForNewParticipants(visitorId, page, count);
@@ -211,6 +216,10 @@ namespace Contestor.Service.Services
                 vmWorks.Add(vmWork);
             }
             return vmWorks;
+        }
+        public async Task<IEnumerable<WorkModel>> GetWorksByUser(long userId, int page, int count)
+        {
+            return await _contestDalService.GetWorksByUser(userId, page, count);
         }
 
         public async Task Vote(long voterId, long workId)

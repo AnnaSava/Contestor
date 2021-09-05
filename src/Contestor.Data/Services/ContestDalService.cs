@@ -108,6 +108,19 @@ namespace Contestor.Data.Services
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<ContestModel>> GetAllByUser(long userId, int page, int count)
+        {
+            return await _dbContext.Contests
+                .Include(m => m.Participants)
+                .Where(m => m.Participants.Select(m => m.UserId).Contains(userId))
+                .AsNoTracking()
+                .OrderByDescending(m => m.Id)
+                .Skip((page - 1) * count)
+                .Take(count)
+                .ProjectTo<ContestModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<ContestModel>> GetAllForNewParticipants(long visitorId, int page, int count)
         {
             if (visitorId == 0) return await _dbContext.Contests
@@ -211,6 +224,18 @@ namespace Contestor.Data.Services
         {
             return await _dbContext.Works
                 .Where(m => m.ContestId == contestId)
+                .AsNoTracking()
+                .OrderBy(m => m.Id)
+                .Skip((page - 1) * count)
+                .Take(count)
+                .ProjectTo<WorkModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<WorkModel>> GetWorksByUser(long userId, int page, int count)
+        {
+            return await _dbContext.Works
+                .Where(m => m.ParticipantId == userId)
                 .AsNoTracking()
                 .OrderBy(m => m.Id)
                 .Skip((page - 1) * count)

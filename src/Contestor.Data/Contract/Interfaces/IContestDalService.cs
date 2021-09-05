@@ -23,6 +23,8 @@ namespace Contestor.Data.Contract.Interfaces
 
         Task<IEnumerable<ContestModel>> GetAllByStatus(string status, int page, int count);
 
+        Task<IEnumerable<ContestModel>> GetAllByUser(long userId, int page, int count);
+
         Task<IEnumerable<ContestModel>> GetAllForNewParticipants(long visitorId, int page, int count);
 
         Task<IEnumerable<ContestModel>> GetAllForVoting(int count = 100);
@@ -42,6 +44,8 @@ namespace Contestor.Data.Contract.Interfaces
         Task<IEnumerable<WorkModel>> GetAllWorks(long contestId, int page, int count);
 
         Task<IEnumerable<WorkModel>> GetAllWorks(long contestId);
+
+        Task<IEnumerable<WorkModel>> GetWorksByUser(long userId, int page, int count);
 
         Task<IEnumerable<WorkWithVotesModel>> GetAllWorksWithVotes(long contestId);
 

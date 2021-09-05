@@ -30,6 +30,8 @@ namespace Contestor.Service.Contract
 
         Task<IEnumerable<ContestModel>> GetAll(int page, int count);
 
+        Task<IEnumerable<ContestModel>> GetAllByUser(long userId, int page, int count);
+
         Task<IEnumerable<ContestModel>> GetAllForNewParticipants(long visitorId, int page, int count);
 
         Task<IEnumerable<ContestModel>> GetAllForVoting();
@@ -57,6 +59,8 @@ namespace Contestor.Service.Contract
         Task<IEnumerable<WorkModel>> GetAllWorks(long contestId);
 
         Task<IEnumerable<WorkForVoteViewModel>> GetAllWorks(long contestId, long visitorId);
+
+        Task<IEnumerable<WorkModel>> GetWorksByUser(long userId, int page, int count);
 
         Task Vote(long voterId, long workId);
 

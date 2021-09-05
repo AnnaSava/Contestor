@@ -1,0 +1,79 @@
+﻿@page "/account/manage"
+@using System.Security.Claims
+@using Contestor.Data.Contract
+@using Contestor.Service.Contract
+@inject IContestService contestService
+@inject AuthenticationStateProvider authProvider
+
+<h3>Личный кабинет @UserId</h3>
+
+<h4>Мои конкурсы</h4>
+@if (Contests is null)
+{
+    <p><em>Загрузка...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var contest in Contests)
+            {
+                <tr>
+                    <td>@contest.Id</td>
+                    <td><a class="nav-link" href="/contest/@contest.Id">@contest.Title</a></td>
+                    <td>@contest.Status</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+
+<h4>Мои работы</h4>
+
+@if (Works is null)
+{
+    <p><em>Загрузка... !</em></p>
+}
+else
+{
+    <table class="table">
+        @foreach (var work in Works)
+        {
+            <tr>
+                <td>@work.Title</td>
+                <td>
+                    <a class="nav-link" href="/contest/@work.ContestId">Конкурс @work.ContestId</a>
+                </td>
+            </tr>
+        }
+        </table>
+}
+
+@code {
+
+    long UserId { get; set; }
+
+    IEnumerable<ContestModel> Contests;
+
+    IEnumerable<WorkModel> Works;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authstate = await authProvider.GetAuthenticationStateAsync();
+        var user = authstate.User;
+
+        var id = user.FindFirst(ClaimTypes.NameIdentifier);
+
+        UserId = long.Parse(id.Value);
+        Contests = await contestService.GetAllByUser(UserId, 1, 100);
+        Works = await contestService.GetWorksByUser(UserId, 1, 100);
+    }
+}
