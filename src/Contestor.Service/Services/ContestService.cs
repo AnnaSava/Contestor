@@ -146,6 +146,11 @@ namespace Contestor.Service.Services
             return await _contestDalService.GetParticipantsCount(contestId);
         }
 
+        public async Task<IEnumerable<ParticipantModel>> GetAllParticipants(long contestId)
+        {
+            return await _contestDalService.GetAllParticipants(contestId, 1, 100);
+        }
+
         public async Task<int> GetParticipantsHavingWorkCount(long contestId)
         {
             return await _contestDalService.GetParticipantsHavingWorkCount(contestId);
@@ -179,11 +184,17 @@ namespace Contestor.Service.Services
             {
                 await _bpmEngineService.CompleteTask(completingTask);
                 return true;
-                    }
+            }
             catch
             {
-                return false;            }
+                return false;
+            }
 
+        }
+
+        public async Task<IEnumerable<WorkModel>> GetAllWorks(long contestId)
+        {
+            return await _contestDalService.GetAllWorks(contestId);
         }
 
         public async Task<IEnumerable<WorkForVoteViewModel>> GetAllWorks(long contestId, long visitorId)

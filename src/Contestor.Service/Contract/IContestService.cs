@@ -46,11 +46,15 @@ namespace Contestor.Service.Contract
 
         Task<int> GetParticipantsCount(long contestId);
 
+        Task<IEnumerable<ParticipantModel>> GetAllParticipants(long contestId);
+
         Task<int> GetParticipantsHavingWorkCount(long contestId);
 
         Task SendWork(WorkModel model);
 
         Task<bool> CompleteTask(CompletingTaskViewModel model);
+
+        Task<IEnumerable<WorkModel>> GetAllWorks(long contestId);
 
         Task<IEnumerable<WorkForVoteViewModel>> GetAllWorks(long contestId, long visitorId);
 

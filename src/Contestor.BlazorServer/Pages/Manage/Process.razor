@@ -30,6 +30,47 @@
             }
         }
 
+        <h4>Участники</h4>
+        @if (Participants?.Count() > 0)
+        {
+            <table class="table">
+                <tr>
+                    <th>Ид пользователя</th>
+                    <th>Отображаемое имя</th>
+                    <th>Количество работ</th>
+                </tr>
+
+                @foreach (var participant in Participants)
+                {
+                    <tr>
+                        <td>@participant.UserId</td>
+                        <td>@participant.DisplayName</td>
+                        <td>@participant.WorksCount</td>
+                    </tr>
+                }
+            </table>
+        }
+
+        <h4>Работы</h4>
+        @if(Works?.Count() > 0)
+        {
+            <table class="table">
+                <tr>
+                    <th>Ид работы</th>
+                    <th>Ид пользователя</th>
+                    <th>Заголовок</th>
+                </tr>
+                @foreach(var work in Works)
+            {
+            <tr>
+                <td>@work.Id</td>
+                <td>@work.ParticipantId</td>
+                <td>@work.Title</td>
+            </tr>
+            }
+            </table>
+        }
+
         @if (WorksWithScore?.Count() > 0)
         {
             <table class="table">
@@ -50,11 +91,18 @@
         public string Id { get; set; }
         ContestManageViewModel Contest = new ContestManageViewModel();
 
+        IEnumerable<ParticipantModel> Participants = new List<ParticipantModel>();
+
+        IEnumerable<WorkModel> Works = new List<WorkModel>();
+
         IEnumerable<WorkWithScoreModel> WorksWithScore = new List<WorkWithScoreModel>();
 
     protected override async Task OnInitializedAsync()
     {
         Contest = await Task.Run(() => contestService.GetOneForManage(Convert.ToInt64(Id)));
+
+        Participants = await contestService.GetAllParticipants(long.Parse(Id));
+        Works = await contestService.GetAllWorks(long.Parse(Id));
 
         WorksWithScore = await contestService.GetTopVotedWorks(long.Parse(Id));
     }
@@ -73,7 +121,7 @@
             TaskId = taskId
         };
 
-        var ok =  await contestService.CompleteTask(model);
+        var ok = await contestService.CompleteTask(model);
 
         if (ok)
         {

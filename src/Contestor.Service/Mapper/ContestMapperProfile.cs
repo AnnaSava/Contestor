@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Contestor.Data.Contract;
 using Contestor.Data.Contract.Models;
 using Contestor.Service.Contract;
 using System;

@@ -1,4 +1,5 @@
-﻿using Contestor.Data.Contract.Models;
+﻿using Contestor.Data.Contract;
+using Contestor.Data.Contract.Models;
 using Contestor.Service.Contract;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

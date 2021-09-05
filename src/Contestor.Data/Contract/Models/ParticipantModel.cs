@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Contestor.Data.Contract.Models
+namespace Contestor.Data.Contract
 {
     public class ParticipantModel
     {
@@ -13,6 +13,8 @@ namespace Contestor.Data.Contract.Models
         public long ContestId { get; set; }
 
         public string DisplayName { get; set; }
+
+        public int WorksCount { get; set; }
 
     }
 }
