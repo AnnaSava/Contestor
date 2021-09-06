@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "Contestor.Seeder": {
+      "commandName": "Project"
+    },
+    "Contestor.Seeder-Dev": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
