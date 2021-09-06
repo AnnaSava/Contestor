@@ -71,6 +71,7 @@
             </table>
         }
 
+        <h4>Работы с голосами</h4>
         @if (WorksWithScore?.Count() > 0)
         {
             <table class="table">
@@ -79,6 +80,12 @@
                     <tr>
                         <td>@work.Work.Title</td>
                         <td>@work.Score</td>
+                        <td>
+                            @if(Contest.Status == ContestStatus.WaitingWinner)
+                        {
+
+                        }
+                        </td>
                     </tr>
                 }
             </table>
