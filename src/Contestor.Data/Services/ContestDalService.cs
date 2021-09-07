@@ -327,25 +327,72 @@ namespace Contestor.Data.Services
             };
 
             _dbContext.Votes.Add(vote);
+
+            work.VotesSum += points;
+
             await _dbContext.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<WorkWithScoreModel>> GetTopVotedWorks(long contestId, int worksCount = 3)
         {
-            var wv = await _dbContext.Votes
-                  .Join(_dbContext.Works,
-                  v => v.WorkId,
-                  w => w.Id,
-                  (v, w) => new { Work = w, Vote = v })
-                  .Where(m => m.Work.ContestId == contestId)
-                  .ToListAsync();
+            //var wv = await _dbContext.Votes
+            //      .Join(_dbContext.Works,
+            //      v => v.WorkId,
+            //      w => w.Id,
+            //      (v, w) => new { Work = w, Vote = v })
+            //      .Where(m => m.Work.ContestId == contestId)
+            //      .ToListAsync();
 
-            var res = wv.GroupBy(m => m.Work)
-                .Select(m => new WorkWithScoreModel { Work = _mapper.Map<WorkModel>(m.Key), Score = m.Sum(s => s.Vote.Points) })
-                .OrderByDescending(m => m.Score)
-                .Take(worksCount);
+            //var res = wv.GroupBy(m => m.Work)
+            //    .Select(m => new WorkWithScoreModel { Work = _mapper.Map<WorkModel>(m.Key), Score = m.Sum(s => s.Vote.Points) })
+            //    .OrderByDescending(m => m.Score)
+            //    .Take(worksCount);
 
-            return res;
+            //return res;
+
+            return await _dbContext.Works
+                      .Where(m => m.ContestId == contestId)
+                      .OrderByDescending(m => m.VotesSum)
+                      .Take(worksCount)
+                      .Select(m => new WorkWithScoreModel
+                      { Work = _mapper.Map<WorkModel>(m), Score = m.VotesSum })
+                      .ToListAsync();
+        }
+
+        public async Task SetWinnerPlaces(long contestId)
+        {
+            var lowestPlace = 3;
+            var currentPlace = 1;
+            var currentVotesSum = 0;
+            var watched = 0;
+
+            while (currentPlace <= lowestPlace)
+            {
+                var work = await _dbContext.Works
+                    .Where(m => m.ContestId == contestId && m.VotesSum > 0)
+                    .OrderByDescending(m => m.VotesSum)
+                    .Skip(watched)
+                    .FirstOrDefaultAsync();
+
+                if (work == null) break;
+
+                // Если рассматриваем первую работу
+                if (watched == 0)
+                {
+                    currentVotesSum = work.VotesSum;
+                }
+
+                if (work.VotesSum < currentVotesSum)
+                {
+                    currentVotesSum = work.VotesSum;
+                    currentPlace++;
+                }
+
+                work.Place = currentPlace;
+                watched++;
+            }
+
+            await _dbContext.SaveChangesAsync();
         }
 
         private async Task LogContest(long contestId, string action, string value = null, string message = null)

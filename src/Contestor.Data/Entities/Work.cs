@@ -24,6 +24,8 @@ namespace Contestor.Data.Entities
 
         public virtual ICollection<Vote> Votes { get; set; }
 
+        public int VotesSum { get; set; }
+
         public int? Place { get; set; }
 
         public string Nomination { get; set; }

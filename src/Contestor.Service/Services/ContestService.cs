@@ -54,6 +54,7 @@ namespace Contestor.Service.Services
         public async Task WaitWinner(long contestId)
         {
             await _contestDalService.SetStatus(contestId, ContestStatus.WaitingWinner);
+            await _contestDalService.SetWinnerPlaces(contestId);
         }
 
         public async Task SetFinishedStatus(long contestId)
