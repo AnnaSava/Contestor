@@ -46,7 +46,6 @@ namespace Contestor.BlazorServer
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
