@@ -14,7 +14,12 @@ namespace Contestor.BpmEngine.Service
 {
     public class BpmEngineClient : IBpmEngineClient
     {
+        #region Const
+
+        private const string ApiUrlVariableName = "apiUrl";
         private const string SelectedActionVariableName = "SelectedAction";
+
+        #endregion
 
         private readonly HttpClient _httpClient;
 
@@ -50,9 +55,14 @@ namespace Contestor.BpmEngine.Service
 
             var startingProcess = new StartingProcessObject(startingProcessModel.BusinessKey);
 
+            if (!string.IsNullOrEmpty(startingProcessModel.ApiUrl))
+            {
+                startingProcess.Variables.Add(ApiUrlVariableName, new VariableObject { Type = "String", Value = startingProcessModel.ApiUrl });
+            }
+
             var startingProcessResult = await SendPostRequest<StartingProcessObject, StartingProcessResultObject>(
-                    $"process-definition/{startingProcessModel.ProcessId}/start",
-                    startingProcess);
+                $"process-definition/{startingProcessModel.ProcessId}/start",
+                startingProcess);
 
             return startingProcessResult.Id;
         }

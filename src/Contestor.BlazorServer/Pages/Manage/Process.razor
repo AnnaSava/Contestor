@@ -3,6 +3,7 @@
 @using Contestor.Service.Contract
 @inject IContestService contestService
 @inject NavigationManager NavigationManager
+@inject AppConfig appConfig;
 
 <h3>@Contest.Title - управление</h3>
 <h4>Status: @Contest.Status</h4>
@@ -116,7 +117,7 @@
 
     protected async void StartContestProcess()
     {
-        await contestService.StartContestProcess(Contest.Id);
+        await contestService.StartContestProcess(Contest.Id, appConfig.ApiUrl);
         NavigationManager.NavigateTo("/manage/contest");
     }
 

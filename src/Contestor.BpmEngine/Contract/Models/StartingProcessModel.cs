@@ -11,5 +11,7 @@ namespace Contestor.BpmEngine.Contract
         public string ProcessId { get; set; }
 
         public string BusinessKey { get; set; }
+
+        public string ApiUrl { get; set; }
     }
 }

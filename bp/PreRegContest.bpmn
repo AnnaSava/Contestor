@@ -43,9 +43,6 @@
       <bpmn:script>def contestId = execution.getProcessBusinessKey().toString();
 execution.setVariable('contestId', contestId);
 
-def apiUrl = 'http://172.16.8.8:5002/api/Contest/';
-execution.setVariable('apiUrl', apiUrl);
-
 def minParticipantsCount = 3;
 execution.setVariable('minParticipantsCount', minParticipantsCount);
 

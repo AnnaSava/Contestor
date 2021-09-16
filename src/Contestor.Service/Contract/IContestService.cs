@@ -40,7 +40,7 @@ namespace Contestor.Service.Contract
 
         Task<Dictionary<string, string>> GetProcessesDictionary();
 
-        Task<string> StartContestProcess(long contestId);
+        Task<string> StartContestProcess(long contestId, string apiUrl);
 
         Task RegisterParticipant(long contestId, long userId);
 

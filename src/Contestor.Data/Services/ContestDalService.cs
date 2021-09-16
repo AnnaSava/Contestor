@@ -366,7 +366,7 @@ namespace Contestor.Data.Services
             var currentVotesSum = 0;
             var watched = 0;
 
-            while (currentPlace <= lowestPlace)
+            while (currentPlace < lowestPlace)
             {
                 var work = await _dbContext.Works
                     .Where(m => m.ContestId == contestId && m.VotesSum > 0)

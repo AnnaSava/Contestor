@@ -115,11 +115,11 @@ namespace Contestor.Service.Services
             return businessProcesses.ToDictionary(x => x.Id, x => x.Name);
         }
 
-        public async Task<string> StartContestProcess(long contestId)
+        public async Task<string> StartContestProcess(long contestId, string apiUrl)
         {
             var contest = await _contestDalService.GetOne(contestId);
 
-            var startProcessModel = new StartingProcessModel { ProcessId = contest.ProcessKey, BusinessKey = contest.Id.ToString() };
+            var startProcessModel = new StartingProcessModel { ProcessId = contest.ProcessKey, BusinessKey = contest.Id.ToString(), ApiUrl = apiUrl };
 
             await _contestDalService.SetStatus(contestId, ContestStatus.Started);
 
