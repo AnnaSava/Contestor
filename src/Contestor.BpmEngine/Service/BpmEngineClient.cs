@@ -101,6 +101,23 @@ namespace Contestor.BpmEngine.Service
             return MapTask(tasks[0], formVarsObject);
         }
 
+        public async Task<IEnumerable<JobModel>> GetTimers()
+        {
+            var timers = await SendGetRequest<JobObject[]>($"job?timers=true");
+
+            if (!timers.Any())
+                return new List<JobModel>();
+
+            return timers.Select(m => new JobModel
+            {
+
+                CreateTime = m.CreateTime,
+                DueDate = m.DueDate,
+                ProcessDefinitionId = m.ProcessDefinitionId,
+                ProcessDefinitionKey = m.ProcessDefinitionKey,
+            });
+        }
+
         private TaskModel MapTask(HistoryTaskObject historyTask, TaskFormVariablesObject formVarsObject)
         {
             var task = new TaskModel

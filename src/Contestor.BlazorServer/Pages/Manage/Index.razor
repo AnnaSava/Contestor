@@ -28,6 +28,7 @@
                         <th>Статус</th>
                         <th>AutoRegEnabled</th>
                         <th>MaxWorksCount</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,6 +42,9 @@
                             <td>@contest.Status</td>
                             <td>@contest.AutoRegEnabled</td>
                             <td>@contest.MaxWorksCount</td>
+                            <td>
+                                <a class="nav-link" href="/manage/contest/edit/@contest.Id">Редактировать</a>
+                            </td>
                         </tr>
                     }
                 </tbody>

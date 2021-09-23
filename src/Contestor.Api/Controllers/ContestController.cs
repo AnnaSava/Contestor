@@ -1,4 +1,5 @@
-﻿using Contestor.Service.Contract;
+﻿using Contestor.Api.Models;
+using Contestor.Service.Contract;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,9 +22,9 @@ namespace Contestor.BpmEngine.Api.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task Open(string contestId)
+        public async Task SetDueDate(string contestId, [FromBody]DateInput input)
         {
-            await _contestService.Open(long.Parse(contestId));
+            await _contestService.SetDueDate(long.Parse(contestId), input?.Date);
         }
 
         [HttpPost]
@@ -31,6 +32,20 @@ namespace Contestor.BpmEngine.Api.Controllers
         public async Task OpenRegistration(string contestId)
         {
             await _contestService.OpenRegistration(long.Parse(contestId));
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task CloseRegistration(string contestId)
+        {
+            await _contestService.CloseRegistration(long.Parse(contestId));
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task Open(string contestId)
+        {
+            await _contestService.Open(long.Parse(contestId));
         }
 
         [HttpPost]

@@ -14,6 +14,8 @@ namespace Contestor.Data.Contract
 
         public const string RegistrationOpen = "regopen";
 
+        public const string RegistrationClosed = "regclosed";
+
         public const string Open = "open";
 
         public const string Voting = "voting";

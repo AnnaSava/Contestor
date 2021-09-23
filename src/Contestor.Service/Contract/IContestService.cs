@@ -12,9 +12,15 @@ namespace Contestor.Service.Contract
     {
         Task<ContestModel> Create(ContestModel model);
 
+        Task<ContestModel> Update(ContestModel model);
+
+        Task SetDueDate(long contestId, string date);
+
         Task Open(long contestId);
 
         Task OpenRegistration(long contestId);
+
+        Task CloseRegistration(long contestId);
 
         Task StartVoting(long contestId);
 

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Contestor.Service.Services
@@ -34,6 +35,20 @@ namespace Contestor.Service.Services
             return await _contestDalService.Create(model);
         }
 
+        public async Task<ContestModel> Update(ContestModel model)
+        {
+            var process = await _bpmEngineService.GetProcessById(model.ProcessKey);
+            model.ProcessName = process?.Name;
+
+            return await _contestDalService.Update(model);
+        }
+
+        public async Task SetDueDate(long contestId, string date)
+        {
+            if (DateTime.TryParse(date, out DateTime parsedDate))
+                await _contestDalService.SetDueDate(contestId, parsedDate);
+        }
+
         public async Task Open(long contestId)
         {            
             await _contestDalService.SetStatus(contestId, ContestStatus.Open);
@@ -44,6 +59,18 @@ namespace Contestor.Service.Services
             //TODO может сделать UoW, чтобы один раз вызывать dbContext.SaveChanges? или один метод на уровне DAL?
             await _contestDalService.SetAutoRegEnabled(contestId, false);
             await _contestDalService.SetStatus(contestId, ContestStatus.RegistrationOpen);
+
+            //TODO врзможно, работа с таймерами понадобится. Пусть пока будет закомментировано
+            //var timer = (await _bpmEngineService.GetTimers()).SingleOrDefault();
+            //if (timer != null)
+            //{
+            //    await _contestDalService.SetDueDate(contestId, DateTime.Parse(timer.DueDate));
+            //}
+        }
+
+        public async Task CloseRegistration(long contestId)
+        {
+            await _contestDalService.SetStatus(contestId, ContestStatus.RegistrationClosed);
         }
 
         public async Task StartVoting(long contestId)
@@ -81,6 +108,7 @@ namespace Contestor.Service.Services
 
             var currentTasks = await _bpmEngineService.GetCurrentTasks(model.Id.ToString());
             vm.Tasks = currentTasks.ToList();
+
             return vm;
         }
 

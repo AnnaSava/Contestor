@@ -19,5 +19,7 @@ namespace Contestor.BpmEngine.Contract
         Task<TaskModel> GetTask(string taskId);
 
         Task<bool> CompleteTask(CompletingTaskModel completingTask);
+
+        Task<IEnumerable<JobModel>> GetTimers();
     }
 }

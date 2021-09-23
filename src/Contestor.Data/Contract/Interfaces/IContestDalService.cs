@@ -11,7 +11,11 @@ namespace Contestor.Data.Contract.Interfaces
     {
         Task<ContestModel> Create(ContestModel model);
 
+        Task<ContestModel> Update(ContestModel model);
+
         Task<long> SetStatus(long contestId, string status);
+
+        Task<long> SetDueDate(long contestId, DateTime? date);
 
         Task<long> SetAutoRegEnabled(long contestId, bool autoRegEnabled);
 

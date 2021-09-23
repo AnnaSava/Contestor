@@ -29,6 +29,19 @@ namespace Contestor.Data.Services
             return _mapper.Map<ContestModel>(entity);
         }
 
+        public async Task<ContestModel> Update(ContestModel model)
+        {
+            var entity = await _dbContext.Contests.FirstOrDefaultAsync(m => m.Id == model.Id);
+            if (entity == null) throw new Exception($"Entity {model.Id} not found");
+
+            _mapper.Map(model, entity);
+
+            entity.Status = ContestStatus.Draft;
+
+            await _dbContext.SaveChangesAsync();
+            return _mapper.Map<ContestModel>(entity);
+        }
+
         public async Task<long> SetStatus(long contestId, string status)
         {
             var entity = await _dbContext.Contests.FirstOrDefaultAsync(m => m.Id == contestId);
@@ -38,6 +51,19 @@ namespace Contestor.Data.Services
             await _dbContext.SaveChangesAsync();
 
             await LogContest(entity.Id, nameof(SetStatus), status);
+
+            return entity.Id;
+        }
+
+        public async Task<long> SetDueDate(long contestId, DateTime? date)
+        {
+            var entity = await _dbContext.Contests.FirstOrDefaultAsync(m => m.Id == contestId);
+            if (entity == null) throw new Exception($"Entity {contestId} not found");
+
+            entity.CurStageEndDate = date;
+            await _dbContext.SaveChangesAsync();
+
+            await LogContest(entity.Id, nameof(SetDueDate), date.HasValue ? date.Value.ToString() : null);
 
             return entity.Id;
         }

@@ -24,6 +24,8 @@ namespace Contestor.Data.Entities
 
         public int MaxWorksCount { get; set; }
 
+        public DateTime? CurStageEndDate { get; set; }
+
         public virtual ICollection<Participant> Participants { get; set; }
 
         public virtual ICollection<Work> Works { get; set; }

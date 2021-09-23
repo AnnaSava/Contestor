@@ -3,15 +3,17 @@ using System;
 using Contestor.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Contestor.Migrations.PostgreSql.Contest
 {
     [DbContext(typeof(ContestDbContext))]
-    partial class ContestDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210923132940_StageDates")]
+    partial class StageDates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,6 +36,10 @@ namespace Contestor.Migrations.PostgreSql.Contest
                     b.Property<DateTime?>("CurStageEndDate")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("cur_stage_end_date");
+
+                    b.Property<DateTime?>("CurStageStartDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("cur_stage_start_date");
 
                     b.Property<string>("Description")
                         .HasColumnType("text")
