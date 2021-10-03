@@ -8,9 +8,9 @@ namespace Contestor.Proto.Api.Controllers
     [ApiController]
     public class ContestController : ControllerBase
     {
-        IContestService _contestService;
+        IContestViewService _contestService;
 
-        public ContestController(IContestService contestService)
+        public ContestController(IContestViewService contestService)
         {
             _contestService = contestService;
         }

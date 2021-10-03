@@ -10,9 +10,9 @@ namespace Contestor.BlazorServer.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        IUserService _userService;
+        IUserViewService _userService;
 
-        public LoginModel(IUserService userService)
+        public LoginModel(IUserViewService userService)
         {
             _userService = userService;
         }

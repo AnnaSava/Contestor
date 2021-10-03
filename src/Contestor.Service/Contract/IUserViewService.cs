@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Contestor.Proto
 {
-    public interface IUserService
+    public interface IUserViewService
     {
         Task<long> Register(RegisterViewModel model);
 

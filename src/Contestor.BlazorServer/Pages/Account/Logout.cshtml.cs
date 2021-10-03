@@ -12,9 +12,9 @@ namespace Contestor.BlazorServer.Pages.Account
     [IgnoreAntiforgeryToken]
     public class LogoutModel : PageModel
     {
-        private readonly IUserService _userService;
+        private readonly IUserViewService _userService;
 
-        public LogoutModel(IUserService userService)
+        public LogoutModel(IUserViewService userService)
         {
             _userService = userService;
         }

@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace Contestor.Proto.Data.Services
 {
-    public class UserDalService : IUserDalService
+    public class UserService : IUserDalService
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IMapper _mapper;
 
-        public UserDalService(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper)
+        public UserService(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;

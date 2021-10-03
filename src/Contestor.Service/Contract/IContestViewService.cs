@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Contestor.Proto
 {
-    public interface IContestService
+    public interface IContestViewService
     {
         Task<ContestModel> Create(ContestModel model);
 

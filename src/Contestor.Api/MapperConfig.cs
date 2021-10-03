@@ -15,7 +15,7 @@ namespace Contestor.Proto.Api
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new ContestDataMapperProfile());
-                mc.AddProfile(new ContestMapperProfile());
+                mc.AddProfile(new ContestViewMapperProfile());
             });
 
             IMapper mapper = mappingConfig.CreateMapper();

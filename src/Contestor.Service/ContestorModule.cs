@@ -35,7 +35,7 @@ namespace Contestor.Proto
                 p.GetRequiredService<IDbContextFactory<ContestDbContext>>()
                 .CreateDbContext());
 
-            services.AddScoped<IContestDalService>(s => new ContestDalService(
+            services.AddScoped<IContestDalService>(s => new ContestService(
                 s.GetService<ContestDbContext>(),
                 s.GetService<IMapper>()));
 
@@ -45,7 +45,7 @@ namespace Contestor.Proto
                    client.BaseAddress = new Uri(config["BpmEngineUri"]);
                });
 
-            services.AddScoped<IContestService>(s => new ContestService(
+            services.AddScoped<IContestViewService>(s => new ContestViewService(
                 s.GetService<IContestDalService>(),
                 s.GetService<IBpmEngineClient>(),
                 s.GetService<IMapper>()));
@@ -57,12 +57,12 @@ namespace Contestor.Proto
                 .AddEntityFrameworkStores<ContestDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddScoped<IUserDalService>(s => new UserDalService(
+            services.AddScoped<IUserDalService>(s => new UserService(
                 s.GetService<UserManager<User>>(),
                 s.GetService<SignInManager<User>>(),
                 s.GetService<IMapper>()));
 
-            services.AddScoped<IUserService>(s => new UserService(
+            services.AddScoped<IUserViewService>(s => new UserViewService(
                 s.GetService<IUserDalService>(),
                 s.GetService<IMapper>()));
         }

@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Contestor.Proto.Data.Services
 {
-    public class ContestDalService : BaseService, IContestDalService
+    public class ContestService : BaseService, IContestDalService
     {
-        public ContestDalService(ContestDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
+        public ContestService(ContestDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {
 
         }

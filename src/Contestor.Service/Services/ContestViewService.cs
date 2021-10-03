@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace Contestor.Proto.Services
 {
-    public class ContestService : IContestService
+    public class ContestViewService : IContestViewService
     {
         private readonly IContestDalService _contestDalService;
         private readonly IBpmEngineClient _bpmEngineService;
         private readonly IMapper _mapper;
 
-        public ContestService(IContestDalService contestDalService, IBpmEngineClient bpmEngineService, IMapper mapper)
+        public ContestViewService(IContestDalService contestDalService, IBpmEngineClient bpmEngineService, IMapper mapper)
         {
             _contestDalService = contestDalService;
             _bpmEngineService = bpmEngineService;

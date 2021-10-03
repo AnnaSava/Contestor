@@ -10,9 +10,9 @@ namespace Contestor.Proto.Api.Controllers
     [ApiController]
     public class FakeController : ControllerBase
     {
-        IContestService _contestService;
+        IContestViewService _contestService;
 
-        public FakeController(IContestService contestService)
+        public FakeController(IContestViewService contestService)
         {
             _contestService = contestService;
         }

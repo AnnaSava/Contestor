@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 
 namespace Contestor.Proto.Services
 {
-    public class UserService : IUserService
+    public class UserViewService : IUserViewService
     {
         private readonly IUserDalService _userDalService;
         private readonly IMapper _mapper;
 
-        public UserService(IUserDalService userDalService, IMapper mapper)
+        public UserViewService(IUserDalService userDalService, IMapper mapper)
         {
             _userDalService = userDalService;
             _mapper = mapper;

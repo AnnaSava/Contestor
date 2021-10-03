@@ -3,9 +3,9 @@ using Contestor.Proto.Data;
 
 namespace Contestor.Proto.Mapper
 {
-    public class ContestMapperProfile : Profile
+    public class ContestViewMapperProfile : Profile
     {
-        public ContestMapperProfile()
+        public ContestViewMapperProfile()
         {
             CreateMap<ContestModel, ContestManageViewModel>();
             CreateMap<ContestManageViewModel, ContestModel>();

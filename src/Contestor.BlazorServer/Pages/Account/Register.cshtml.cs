@@ -10,10 +10,10 @@ namespace Contestor.BlazorServer.Pages.Account
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
-        IUserService _userService;
-        IContestService _contestService;
+        IUserViewService _userService;
+        IContestViewService _contestService;
 
-        public RegisterModel(IUserService userService, IContestService contestService)
+        public RegisterModel(IUserViewService userService, IContestViewService contestService)
         {
             _userService = userService;
             _contestService = contestService;
