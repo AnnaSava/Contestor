@@ -1,17 +1,12 @@
 ﻿using AutoMapper;
-using Contestor.BpmEngine.Contract;
-using Contestor.Data.Contract;
-using Contestor.Data.Contract.Interfaces;
-using Contestor.Data.Contract.Models;
-using Contestor.Service.Contract;
+using Contestor.Proto.BpmEngine;
+using Contestor.Proto.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace Contestor.Service.Services
+namespace Contestor.Proto.Services
 {
     public class ContestService : IContestService
     {

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Contestor.Data.Contract.Models
+namespace Contestor.Proto.Data
 {
-  public  class WorkWithVotesModel : BaseModel
+    public class WorkWithVotesModel : BaseModel
     {
         public long ParticipantId { get; set; }
 

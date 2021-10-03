@@ -1,11 +1,4 @@
-﻿using Contestor.Data.Contract.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Contestor.Data.Contract
+﻿namespace Contestor.Proto.Data
 {
     public class WorkModel : BaseModel
     {

@@ -1,11 +1,8 @@
-﻿using Contestor.BpmEngine.JsonObjects;
-using System;
+﻿using Contestor.Proto.BpmEngine.JsonObjects;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Contestor.BpmEngine.Mapper
+namespace Contestor.Proto.BpmEngine.Mapper
 {
     public static class MappingExtentions
     {

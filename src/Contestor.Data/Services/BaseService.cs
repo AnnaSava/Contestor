@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Contestor.Data.Services
+namespace Contestor.Proto.Data.Services
 {
     public abstract class BaseService
     {

@@ -1,6 +1,6 @@
-﻿using Contestor.Data;
-using Contestor.Data.Entities;
-using Contestor.Service;
+﻿using Contestor.Proto;
+using Contestor.Proto.Data.Entities;
+using Contestor.Proto.Data.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Contestor.Seeder
+namespace Contestor.Proto.Seeder
 {
     class Program
     {

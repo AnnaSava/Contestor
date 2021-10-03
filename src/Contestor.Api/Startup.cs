@@ -1,5 +1,3 @@
-using Contestor.Api;
-using Contestor.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
-namespace Contestor.BpmEngine.Api
+namespace Contestor.Proto.Api
 {
     public class Startup
     {

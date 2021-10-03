@@ -1,13 +1,9 @@
-﻿using Contestor.BpmEngine.Contract;
-using System;
+﻿using Contestor.Proto.BpmEngine;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Contestor.Service.Contract
+namespace Contestor.Proto
 {
-   public class ContestManageViewModel
+    public class ContestManageViewModel
     {
         public long Id { get; set; }
 

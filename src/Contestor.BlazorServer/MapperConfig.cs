@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
-using Contestor.Data.Mapper;
-using Contestor.Service.Mapper;
+using Contestor.Proto.Data.Mapper;
+using Contestor.Proto.Mapper;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Contestor.BlazorServer
 {

@@ -1,5 +1,5 @@
 using Contestor.BlazorServer.Data;
-using Contestor.Service;
+using Contestor.Proto;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

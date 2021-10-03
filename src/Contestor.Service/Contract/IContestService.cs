@@ -1,12 +1,8 @@
-﻿using Contestor.Data.Contract;
-using Contestor.Data.Contract.Models;
-using System;
+﻿using Contestor.Proto.Data;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Contestor.Service.Contract
+namespace Contestor.Proto
 {
     public interface IContestService
     {

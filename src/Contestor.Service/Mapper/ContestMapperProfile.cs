@@ -1,14 +1,7 @@
 ﻿using AutoMapper;
-using Contestor.Data.Contract;
-using Contestor.Data.Contract.Models;
-using Contestor.Service.Contract;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Contestor.Proto.Data;
 
-namespace Contestor.Service.Mapper
+namespace Contestor.Proto.Mapper
 {
     public class ContestMapperProfile : Profile
     {

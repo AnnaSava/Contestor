@@ -1,13 +1,8 @@
-﻿using Contestor.Api.Models;
-using Contestor.Service.Contract;
-using Microsoft.AspNetCore.Http;
+﻿using Contestor.Proto.Api.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace Contestor.BpmEngine.Api.Controllers
+namespace Contestor.Proto.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

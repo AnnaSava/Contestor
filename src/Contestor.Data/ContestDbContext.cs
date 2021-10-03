@@ -1,9 +1,8 @@
-﻿using Contestor.Data.Entities;
+﻿using Contestor.Proto.Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
 
-namespace Contestor.Data
+namespace Contestor.Proto.Data.Services
 {
     public class ContestDbContext : IdentityDbContext<User, Role, long>
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Contestor.Data.Entities
+namespace Contestor.Proto.Data.Entities
 {
     public class Work : BaseEntity
     {

@@ -1,14 +1,10 @@
-﻿using Contestor.Data.Contract;
-using Contestor.Data.Contract.Models;
-using Contestor.Service.Contract;
-using Microsoft.AspNetCore.Http;
+﻿using Contestor.Proto;
+using Contestor.Proto.Data;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace Contestor.Api.Controllers
+namespace Contestor.Proto.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

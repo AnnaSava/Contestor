@@ -1,24 +1,17 @@
 ﻿using AutoMapper;
-using Contestor.BpmEngine.Contract;
-using Contestor.BpmEngine.Service;
-using Contestor.Data;
-using Contestor.Data.Contract;
-using Contestor.Data.Contract.Interfaces;
-using Contestor.Data.Entities;
-using Contestor.Data.Services;
-using Contestor.Service.Contract;
-using Contestor.Service.Services;
+using Contestor.Proto.BpmEngine;
+using Contestor.Proto.BpmEngine.Services;
+using Contestor.Proto.Data;
+using Contestor.Proto.Data.Entities;
+using Contestor.Proto.Data.Services;
+using Contestor.Proto.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Contestor.Service
+namespace Contestor.Proto
 {
     public static class ContestorModule
     {

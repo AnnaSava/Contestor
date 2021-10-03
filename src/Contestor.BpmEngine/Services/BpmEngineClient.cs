@@ -1,6 +1,5 @@
-﻿using Contestor.BpmEngine.Contract;
-using Contestor.BpmEngine.JsonObjects;
-using Contestor.BpmEngine.Mapper;
+﻿using Contestor.Proto.BpmEngine.JsonObjects;
+using Contestor.Proto.BpmEngine.Mapper;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -10,7 +9,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Contestor.BpmEngine.Service
+namespace Contestor.Proto.BpmEngine.Services
 {
     public class BpmEngineClient : IBpmEngineClient
     {

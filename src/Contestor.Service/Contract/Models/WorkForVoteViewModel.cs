@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Contestor.Service.Contract
+namespace Contestor.Proto
 {
     public class WorkForVoteViewModel
     {

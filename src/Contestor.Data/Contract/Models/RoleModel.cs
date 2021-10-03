@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Contestor.Data.Contract.Models
+namespace Contestor.Proto.Data
 {
-  public  class RoleModel : BaseModel
+    public class RoleModel : BaseModel
     {
     }
 }
