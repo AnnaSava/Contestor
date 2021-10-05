@@ -6,10 +6,10 @@ namespace Contestor.Proto.Services
 {
     public class UserViewService : IUserViewService
     {
-        private readonly IUserDalService _userDalService;
+        private readonly IUserService _userDalService;
         private readonly IMapper _mapper;
 
-        public UserViewService(IUserDalService userDalService, IMapper mapper)
+        public UserViewService(IUserService userDalService, IMapper mapper)
         {
             _userDalService = userDalService;
             _mapper = mapper;

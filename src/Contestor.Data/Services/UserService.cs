@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Contestor.Proto.Data.Services
 {
-    public class UserService : IUserDalService
+    public class UserService : IUserService
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;

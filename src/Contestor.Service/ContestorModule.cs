@@ -35,7 +35,7 @@ namespace Contestor.Proto
                 p.GetRequiredService<IDbContextFactory<ContestDbContext>>()
                 .CreateDbContext());
 
-            services.AddScoped<IContestDalService>(s => new ContestService(
+            services.AddScoped<IContestService>(s => new ContestService(
                 s.GetService<ContestDbContext>(),
                 s.GetService<IMapper>()));
 
@@ -46,7 +46,7 @@ namespace Contestor.Proto
                });
 
             services.AddScoped<IContestViewService>(s => new ContestViewService(
-                s.GetService<IContestDalService>(),
+                s.GetService<IContestService>(),
                 s.GetService<IBpmEngineClient>(),
                 s.GetService<IMapper>()));
         }
@@ -57,13 +57,13 @@ namespace Contestor.Proto
                 .AddEntityFrameworkStores<ContestDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddScoped<IUserDalService>(s => new UserService(
+            services.AddScoped<IUserService>(s => new UserService(
                 s.GetService<UserManager<User>>(),
                 s.GetService<SignInManager<User>>(),
                 s.GetService<IMapper>()));
 
             services.AddScoped<IUserViewService>(s => new UserViewService(
-                s.GetService<IUserDalService>(),
+                s.GetService<IUserService>(),
                 s.GetService<IMapper>()));
         }
     }

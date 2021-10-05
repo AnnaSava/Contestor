@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Contestor.Proto.Data
 {
-    public interface IContestDalService
+    public interface IContestService
     {
         Task<ContestModel> Create(ContestModel model);
 
@@ -41,6 +41,8 @@ namespace Contestor.Proto.Data
         Task<int> GetParticipantsCount(long contestId);
 
         Task<int> GetParticipantsHavingWorkCount(long contestId);
+
+        Task<int> GetWorksHavingVotesCount(long contestId);
 
         Task<WorkModel> CreateWork(WorkModel model);
 

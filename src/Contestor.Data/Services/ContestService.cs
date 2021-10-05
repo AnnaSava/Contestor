@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Contestor.Proto.Data.Services
 {
-    public class ContestService : BaseService, IContestDalService
+    public class ContestService : BaseService, IContestService
     {
         public ContestService(ContestDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {
@@ -299,6 +299,13 @@ namespace Contestor.Proto.Data.Services
                 .Where(m => m.ContestId == contestId)
                 .Select(m => m.ParticipantId)
                 .Distinct()
+                .CountAsync();
+        }
+
+        public async Task<int> GetWorksHavingVotesCount(long contestId)
+        {
+            return await _dbContext.Works
+                .Where(m => m.ContestId == contestId && m.VotesSum > 0)
                 .CountAsync();
         }
 

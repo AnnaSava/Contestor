@@ -2,7 +2,7 @@
 
 namespace Contestor.Proto.Data
 {
-    public interface IUserDalService
+    public interface IUserService
     {
         Task<long> Register(UserModel model, string password);
 

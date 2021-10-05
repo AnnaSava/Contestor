@@ -20,6 +20,8 @@ namespace Contestor.Proto.Data
 
         public const string Voting = "voting";
 
+        public const string VotingFinished = "votingfin";
+
         public const string WaitingWinner = "waitwinner";
 
         public const string Finished = "finished";

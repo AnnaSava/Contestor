@@ -52,9 +52,16 @@ namespace Contestor.Proto.Api.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task WaitWinner(string contestId)
+        public async Task FinishVoting(string contestId)
         {
-            await _contestService.WaitWinner(long.Parse(contestId));
+            await _contestService.FinishVoting(long.Parse(contestId));
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task PublishWinners(string contestId)
+        {
+            await _contestService.PublishWinners(long.Parse(contestId));
         }
 
         [HttpPost]
@@ -76,6 +83,13 @@ namespace Contestor.Proto.Api.Controllers
         public async Task<int> GetParticipantsHavingWorkCount(long contestId)
         {
             return await _contestService.GetParticipantsHavingWorkCount(contestId);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<int> GetWorksHavingVotesCount(long contestId)
+        {
+            return await _contestService.GetWorksHavingVotesCount(contestId);
         }
     }
 }

@@ -20,7 +20,9 @@ namespace Contestor.Proto
 
         Task StartVoting(long contestId);
 
-        Task WaitWinner(long contestId);
+        Task FinishVoting(long contestId);
+
+        Task PublishWinners(long contestId);
 
         Task SetFinishedStatus(long contestId);
 
@@ -53,6 +55,8 @@ namespace Contestor.Proto
         Task<IEnumerable<ParticipantModel>> GetAllParticipants(long contestId);
 
         Task<int> GetParticipantsHavingWorkCount(long contestId);
+
+        Task<int> GetWorksHavingVotesCount(long contestId);
 
         Task SendWork(WorkModel model);
 
