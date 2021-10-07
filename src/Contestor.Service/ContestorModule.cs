@@ -53,6 +53,16 @@ namespace Contestor.Proto
 
         public static void AddUser(this IServiceCollection services, IConfiguration config)
         {
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 1;
+                options.Password.RequiredUniqueChars = 1;
+            });
+
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<ContestDbContext>()
                 .AddDefaultTokenProviders();
