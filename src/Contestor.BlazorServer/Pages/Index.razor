@@ -27,7 +27,7 @@ else
                 </AuthorizeView>
             </td>
             <td>@if (contest.CurStageEndDate.HasValue)
-            {<text>до @contest.CurStageEndDate.Value.ToString("hh:mm dd.MM.yy")</text>}</td>
+            {<text>до @contest.CurStageEndDate.Value.ToString("HH:mm dd.MM.yy")</text>}</td>
         </tr>
         }
     </table>
@@ -73,7 +73,7 @@ else
                 <td>@contest.ProcessName</td>
                 <td>@contest.Status</td>
                 <td>@if (contest.CurStageEndDate.HasValue)
-                {<text>до @contest.CurStageEndDate.Value.ToString("hh:mm dd.MM.yy")</text>}</td>
+                {<text>до @contest.CurStageEndDate.Value.ToString("HH:mm dd.MM.yy")</text>}</td>
                 <td>
                     <AuthorizeView>
                         <Authorized>
