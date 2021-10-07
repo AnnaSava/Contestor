@@ -26,6 +26,7 @@
                         <th>Описание</th>
                         <th>Схема</th>
                         <th>Статус</th>
+                        <th>Окончание этапа</th>
                         <th>AutoRegEnabled</th>
                         <th>MaxWorksCount</th>
                         <th></th>
@@ -40,6 +41,7 @@
                             <td>@contest.Description</td>
                             <td>@contest.ProcessName</td>
                             <td>@contest.Status</td>
+                            <td>@if (contest.CurStageEndDate.HasValue) { <text>до @contest.CurStageEndDate.Value.ToString("hh:mm dd.MM.yy")</text> }</td>
                             <td>@contest.AutoRegEnabled</td>
                             <td>@contest.MaxWorksCount</td>
                             <td>

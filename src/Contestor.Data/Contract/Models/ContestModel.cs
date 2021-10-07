@@ -24,6 +24,8 @@ namespace Contestor.Proto.Data
 
         public int MaxWorksCount { get; set; }
 
+        public DateTime? CurStageEndDate { get; set; }
+
         #region ViewModel additions
 
         public bool VisitorIsParticipant { get; set; }

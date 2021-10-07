@@ -1,4 +1,5 @@
 ﻿using Contestor.Proto.BpmEngine;
+using System;
 using System.Collections.Generic;
 
 namespace Contestor.Proto
@@ -18,6 +19,8 @@ namespace Contestor.Proto
         public int RoundNumber { get; set; }
 
         public string Status { get; set; }
+
+        public DateTime? CurStageEndDate { get; set; }
 
         public bool AutoRegEnabled { get; set; }
 

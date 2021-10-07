@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_16jbtzc" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.9.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
-  <bpmn:process id="Process_170d4z0" name="Конкурс с предварительной регистрацией" isExecutable="true">
+  <bpmn:process id="Process_1708yz0" name="Конкурс с предварительной регистрацией - тест" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_06jmrdy</bpmn:outgoing>
     </bpmn:startEvent>
@@ -46,7 +46,7 @@ execution.setVariable('participantsCount', participantsCount);
 def minVotedWorksCount = 3;
 execution.setVariable('minVotedWorksCount', minParticipantsCount);
 
-def stageDuration = 'P0Y0M0DT6H0M0S';
+def stageDuration = 'P0Y0M0DT0H2M0S';
 execution.setVariable('stageDuration', stageDuration);</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:sequenceFlow id="Flow_0el7vsj" sourceRef="Activity_0pmxg87" targetRef="Activity_1wzuaag" />
@@ -294,7 +294,7 @@ connector.setVariable("participantsHavingWorkCount", response as int);
     <bpmn:scriptTask id="Activity_0vmelmz" name="Установка срока продления" scriptFormat="groovy">
       <bpmn:incoming>Flow_04jf5ub</bpmn:incoming>
       <bpmn:outgoing>Flow_0syypz5</bpmn:outgoing>
-      <bpmn:script>def stageDuration = 'P0Y0M0DT2H0M0S';
+      <bpmn:script>def stageDuration = 'P0Y0M0DT0H1M0S';
 execution.setVariable('stageDuration', stageDuration);</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:serviceTask id="Activity_1qfcyiq" name="Окончание этапа: регистрация участников">
@@ -377,21 +377,21 @@ counter++;
     <bpmn:scriptTask id="Activity_19hdxbj" name="Установка срока приема работ" scriptFormat="groovy">
       <bpmn:incoming>Flow_1ld16sa</bpmn:incoming>
       <bpmn:outgoing>Flow_0mlj0mz</bpmn:outgoing>
-      <bpmn:script>def stageDuration = 'P0Y0M0DT6H0M0S';
+      <bpmn:script>def stageDuration = 'P0Y0M0DT0H2M0S';
 execution.setVariable('stageDuration', stageDuration);</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:sequenceFlow id="Flow_0mlj0mz" sourceRef="Activity_19hdxbj" targetRef="Activity_1vtki5d" />
     <bpmn:scriptTask id="Activity_0e2c2pr" name="Установка срока продления" scriptFormat="groovy">
       <bpmn:incoming>Flow_0b5qz7p</bpmn:incoming>
       <bpmn:outgoing>Flow_17ch18q</bpmn:outgoing>
-      <bpmn:script>def stageDuration = 'P0Y0M0DT2H0M0S';
+      <bpmn:script>def stageDuration = 'P0Y0M0DT0H1M0S';
 execution.setVariable('stageDuration', stageDuration);</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:sequenceFlow id="Flow_17ch18q" sourceRef="Activity_0e2c2pr" targetRef="Activity_1vtki5d" />
     <bpmn:scriptTask id="Activity_06d8ui2" name="Установка срока голосования" scriptFormat="groovy">
       <bpmn:incoming>Flow_19hmp47</bpmn:incoming>
       <bpmn:outgoing>Flow_0h4nm2e</bpmn:outgoing>
-      <bpmn:script>def stageDuration = 'P0Y0M0DT6H0M0S';
+      <bpmn:script>def stageDuration = 'P0Y0M0DT0H2M0S';
 execution.setVariable('stageDuration', stageDuration);</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:sequenceFlow id="Flow_0h4nm2e" sourceRef="Activity_06d8ui2" targetRef="Activity_0ienjos" />
@@ -479,7 +479,7 @@ connector.setVariable("worksHavingVotesCount", response as int);
     <bpmn:scriptTask id="Activity_1rwxlxq" name="Установка срока продления" scriptFormat="groovy">
       <bpmn:incoming>Flow_1lfekqn</bpmn:incoming>
       <bpmn:outgoing>Flow_1u9swyv</bpmn:outgoing>
-      <bpmn:script>def stageDuration = 'P0Y0M0DT2H0M0S';
+      <bpmn:script>def stageDuration = 'P0Y0M0DT0H1M0S';
 execution.setVariable('stageDuration', stageDuration);</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:sequenceFlow id="Flow_0dwjmgr" name="Нет" sourceRef="Gateway_1bn24jx" targetRef="Activity_0nqzi98">
@@ -490,7 +490,7 @@ execution.setVariable('stageDuration', stageDuration);</bpmn:script>
     <bpmn:sequenceFlow id="Flow_1pk8zh6" name="Завершить" sourceRef="Activity_0nqzi98" targetRef="Activity_0o25c87" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_170d4z0">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1708yz0">
       <bpmndi:BPMNEdge id="Flow_1pk8zh6_di" bpmnElement="Flow_1pk8zh6">
         <di:waypoint x="2710" y="230" />
         <di:waypoint x="2940" y="230" />

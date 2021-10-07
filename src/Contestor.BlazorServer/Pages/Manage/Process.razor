@@ -7,6 +7,10 @@
 
 <h3>@Contest.Title - управление</h3>
 <h4>Status: @Contest.Status</h4>
+@if (Contest.CurStageEndDate.HasValue)
+{
+<p>до @Contest.CurStageEndDate.Value.ToString("hh:mm dd.MM.yy")</p>
+}
 <hr />
 
 <AuthorizeView>
