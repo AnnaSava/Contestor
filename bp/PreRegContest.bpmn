@@ -52,6 +52,35 @@ execution.setVariable('stageDuration', stageDuration);</bpmn:script>
     <bpmn:sequenceFlow id="Flow_0el7vsj" sourceRef="Activity_0pmxg87" targetRef="Activity_1wzuaag" />
     <bpmn:sequenceFlow id="Flow_1y0o0wj" sourceRef="Event_0wsdzji" targetRef="Activity_0mshf4g" />
     <bpmn:intermediateCatchEvent id="Event_0wsdzji" name="Окончание приема работ">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy">import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
+import java.net.*;
+
+def jobs = execution.getJobs();
+
+def contestId = execution.getProcessBusinessKey().toString();
+def apiUrl = execution.getVariable('apiUrl');
+
+def counter = 1;
+for(JobEntity job in jobs) {
+execution.setVariable('job_' + counter, job.duedate);
+
+def url = apiUrl + 'SetDueDate?contestId='+contestId;
+
+def postmanPost = new URL(url);
+def message = '{"date":"' + job.duedate.format("yyyy-MM-dd'T'HH:mm:ss'Z'") + '"}';
+def post = postmanPost.openConnection();
+post.setRequestMethod('POST');
+post.setDoOutput(true);
+post.setRequestProperty("Content-Type", "application/json");
+post.getOutputStream().write(message.getBytes("UTF-8"))
+post.getResponseCode();
+
+counter++;
+}</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_01itb7l</bpmn:incoming>
       <bpmn:outgoing>Flow_1y0o0wj</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_0ugbpfo">
@@ -60,6 +89,35 @@ execution.setVariable('stageDuration', stageDuration);</bpmn:script>
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="Flow_1om48j3" sourceRef="Event_1oeasej" targetRef="Activity_074y6dr" />
     <bpmn:intermediateCatchEvent id="Event_1oeasej" name="Окончание голосования">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy">import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
+import java.net.*;
+
+def jobs = execution.getJobs();
+
+def contestId = execution.getProcessBusinessKey().toString();
+def apiUrl = execution.getVariable('apiUrl');
+
+def counter = 1;
+for(JobEntity job in jobs) {
+execution.setVariable('job_' + counter, job.duedate);
+
+def url = apiUrl + 'SetDueDate?contestId='+contestId;
+
+def postmanPost = new URL(url);
+def message = '{"date":"' + job.duedate.format("yyyy-MM-dd'T'HH:mm:ss'Z'") + '"}';
+def post = postmanPost.openConnection();
+post.setRequestMethod('POST');
+post.setDoOutput(true);
+post.setRequestProperty("Content-Type", "application/json");
+post.getOutputStream().write(message.getBytes("UTF-8"))
+post.getResponseCode();
+
+counter++;
+}</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1mq1vz1</bpmn:incoming>
       <bpmn:outgoing>Flow_1om48j3</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_10unrlw">
