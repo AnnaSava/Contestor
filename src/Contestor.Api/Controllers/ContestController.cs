@@ -45,6 +45,13 @@ namespace Contestor.Proto.Api.Controllers
 
         [HttpPost]
         [Route("[action]")]
+        public async Task Close(string contestId)
+        {
+            await _contestService.Close(long.Parse(contestId));
+        }
+
+        [HttpPost]
+        [Route("[action]")]
         public async Task StartVoting(string contestId)
         {
             await _contestService.StartVoting(long.Parse(contestId));

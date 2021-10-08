@@ -10,7 +10,7 @@ namespace Contestor.Proto
     {
         Task<long> Register(RegisterViewModel model);
 
-        Task Login(LoginViewModel model);
+        Task<int> Login(LoginViewModel model);
 
         Task Logout();
      }

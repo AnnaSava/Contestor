@@ -71,6 +71,14 @@
                 <td>@work.Id</td>
                 <td>@work.ParticipantId</td>
                 <td>@work.Title</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(work.Content) && work.Content.Contains(".jpg"))
+                    {
+                        <div>
+                            <img src="@work.Content" style="height:150px" />
+                        </div>
+                    }
+                </td>
             </tr>
             }
             </table>

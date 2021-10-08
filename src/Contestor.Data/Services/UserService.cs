@@ -20,6 +20,9 @@ namespace Contestor.Proto.Data.Services
 
         public async Task<long> Register(UserModel model, string password)
         {
+            var exist = await _userManager.FindByNameAsync(model.UserName);
+            if (exist != null) return -1;
+
             var entity = _mapper.Map<User>(model);
             var result = await _userManager.CreateAsync(entity, password);
             if (result.Succeeded)
@@ -30,9 +33,10 @@ namespace Contestor.Proto.Data.Services
             return 0;
         }
 
-        public async Task Login(string userName, string password)
+        public async Task<int> Login(string userName, string password)
         {
-            await _signInManager.PasswordSignInAsync(userName, password, true, false);
+           var result = await _signInManager.PasswordSignInAsync(userName, password, true, false);
+            return result.Succeeded ? 0 : -1;
         }
 
         public async Task Logout()

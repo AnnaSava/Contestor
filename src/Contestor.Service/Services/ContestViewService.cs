@@ -49,6 +49,11 @@ namespace Contestor.Proto.Services
             await _contestService.SetStatus(contestId, ContestStatus.Open);
         }
 
+        public async Task Close (long contestId)
+        {
+            await _contestService.SetStatus(contestId, ContestStatus.Closed);
+        }
+
         public async Task OpenRegistration(long contestId)
         {
             //TODO может сделать UoW, чтобы один раз вызывать dbContext.SaveChanges? или один метод на уровне DAL?

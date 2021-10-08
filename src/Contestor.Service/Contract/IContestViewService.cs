@@ -14,6 +14,8 @@ namespace Contestor.Proto
 
         Task Open(long contestId);
 
+        Task Close(long contestId);
+
         Task OpenRegistration(long contestId);
 
         Task CloseRegistration(long contestId);

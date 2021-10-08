@@ -102,7 +102,7 @@ namespace Contestor.Proto.Data.Services
                 model.VisitorIsParticipant = true;
             }
 
-            model.VisitorWorksCount = entity.Works.Count();
+            model.VisitorWorksCount = entity.Works.Where(m => m.ParticipantId == visitorId).Count();
 
             return model;
         }

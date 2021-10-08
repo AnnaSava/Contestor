@@ -39,7 +39,18 @@ namespace Contestor.BlazorServer.Pages.Account
         {
             if (ModelState.IsValid)
             {
-                await _userService.Register(Input);
+                var result = await _userService.Register(Input);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("", "Ошибка при регистрации: пользователь с таким именем уже существует");
+                    return Page();
+                }
+                if (result == 0)
+                {
+                    ModelState.AddModelError("", "Ошибка при регистрации");
+                    return Page();
+                }
+
                 if (SendWork && Contest != null)
                     return Redirect($"~/SendWork/{Contest.Id}");
                 if (Contest != null)

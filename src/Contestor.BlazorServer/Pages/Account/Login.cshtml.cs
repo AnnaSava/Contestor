@@ -29,8 +29,12 @@ namespace Contestor.BlazorServer.Pages.Account
         {
             if (ModelState.IsValid)
             {
-               // var result =
-                    await _userService.Login(Input);// _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, false);
+                var result = await _userService.Login(Input);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("", "Ошибка входа: неверный логин или пароль");
+                    return Page();
+                }
                 return Redirect("~/");
                 //if (result.Succeeded)
                 //{

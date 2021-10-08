@@ -6,7 +6,7 @@ namespace Contestor.Proto.Data
     {
         Task<long> Register(UserModel model, string password);
 
-        Task Login(string userName, string password);
+        Task<int> Login(string userName, string password);
 
         Task Logout();
     }
