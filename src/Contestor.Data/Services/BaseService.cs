@@ -9,10 +9,10 @@ namespace Contestor.Proto.Data.Services
 {
     public abstract class BaseService
     {
-        protected readonly ContestDbContext _dbContext;
+        protected readonly ContestContext _dbContext;
         protected readonly IMapper _mapper;
 
-        public BaseService(ContestDbContext dbContext, IMapper mapper)
+        public BaseService(ContestContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;

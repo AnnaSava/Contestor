@@ -59,7 +59,7 @@ namespace Contestor.Proto.Seeder
 
         private static async Task Seed(IServiceScope scope)
         {
-            var context = scope.ServiceProvider.GetService<ContestDbContext>();
+            var context = scope.ServiceProvider.GetService<ContestContext>();
             context.Database.Migrate();
 
             var adminExists = context.Users.Any(m => m.UserName == "admin");

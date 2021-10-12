@@ -24,19 +24,19 @@ namespace Contestor.Proto
             //        .UseSnakeCaseNamingConvention();
             //});
 
-            services.AddDbContextFactory<ContestDbContext>(options =>
+            services.AddDbContextFactory<ContestContext>(options =>
             {
                 options
                     .UseNpgsql(config.GetConnectionString("ContestConnection"), b => b.MigrationsAssembly("Contestor.Migrations.PostgreSql"))
                     .UseSnakeCaseNamingConvention();
             });
 
-            services.AddScoped<ContestDbContext>(p =>
-                p.GetRequiredService<IDbContextFactory<ContestDbContext>>()
+            services.AddScoped<ContestContext>(p =>
+                p.GetRequiredService<IDbContextFactory<ContestContext>>()
                 .CreateDbContext());
 
             services.AddScoped<IContestService>(s => new ContestService(
-                s.GetService<ContestDbContext>(),
+                s.GetService<ContestContext>(),
                 s.GetService<IMapper>()));
 
             services.AddHttpClient<IBpmEngineClient, BpmEngineClient>(
@@ -64,7 +64,7 @@ namespace Contestor.Proto
             });
 
             services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<ContestDbContext>()
+                .AddEntityFrameworkStores<ContestContext>()
                 .AddDefaultTokenProviders();
 
             services.AddScoped<IUserService>(s => new UserService(

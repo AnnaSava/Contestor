@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Contestor.Migrations.PostgreSql.Contest
 {
-    [DbContext(typeof(ContestDbContext))]
+    [DbContext(typeof(ContestContext))]
     [Migration("20210724083458_ProcessName")]
     partial class ProcessName
     {

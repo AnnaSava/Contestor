@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Contestor.Migrations.PostgreSql.Contest
 {
-    [DbContext(typeof(ContestDbContext))]
+    [DbContext(typeof(ContestContext))]
     partial class ContestDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

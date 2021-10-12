@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Contestor.Migrations.PostgreSql.Contest
 {
-    [DbContext(typeof(ContestDbContext))]
+    [DbContext(typeof(ContestContext))]
     [Migration("20210906191612_WorkWinnerFields")]
     partial class WorkWinnerFields
     {

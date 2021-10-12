@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Contestor.Proto.Data.Services
 {
-    public class ContestDbContext : IdentityDbContext<User, Role, long>
+    public class ContestContext : IdentityDbContext<User, Role, long>
     {
-        public ContestDbContext(DbContextOptions<ContestDbContext> options)
+        public ContestContext(DbContextOptions<ContestContext> options)
             : base(options)
         {
             //Database.EnsureCreated();

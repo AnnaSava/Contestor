@@ -11,7 +11,7 @@ namespace Contestor.Proto.Data.Services
 {
     public class ContestService : BaseService, IContestService
     {
-        public ContestService(ContestDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
+        public ContestService(ContestContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {
 
         }
