@@ -8,6 +8,8 @@
 
 <h3>Contest @Contest.Title</h3>
 
+<div class="row">
+    <div class="col-lg-7">
 <p>Статус: @Contest.Status</p>
 
 <p>@Contest.Description</p>
@@ -71,6 +73,13 @@
         </Authorized>
     </AuthorizeView>
 }
+    </div>
+    <div class="col-lg-5">
+        <Chat></Chat>
+    </div>
+</div>
+
+
 
 @code {
     [Parameter]
