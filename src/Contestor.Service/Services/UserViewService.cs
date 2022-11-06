@@ -26,6 +26,11 @@ namespace Contestor.Proto.Services
           return  await _userService.Login(model.UserName, model.Password);
         }
 
+        public async Task<UserModel> Auth(LoginViewModel model)
+        {
+            return await _userService.Auth(model.UserName, model.Password);
+        }
+
         public async Task Logout()
         {
             await _userService.Logout();

@@ -4,19 +4,25 @@
 
 <h3>Чят</h3>
 
-<div class="form-group">
-    <label>
-        User:
-        <input @bind="userInput" />
-    </label>
-</div>
-<div class="form-group">
-    <label>
-        Message:
-        <input @bind="messageInput" size="50" />
-    </label>
-</div>
-<button @onclick="Send" disabled="@(!IsConnected)">Send</button>
+<AuthorizeView>
+    <Authorized>
+        <div class="form-group">
+            <label>
+                User:
+                <input @bind="userInput" />
+            </label>
+        </div>   
+        
+        <div class="form-group">
+            <label>
+                Message:
+                <input @bind="messageInput" size="50" />
+            </label>
+        </div>
+        <button @onclick="Send" disabled="@(!IsConnected)">Send</button>
+
+    </Authorized> 
+</AuthorizeView>
 
 <hr>
 
@@ -28,6 +34,9 @@
 </ul>
 
 @code {
+    [Parameter]
+    public string Group { get; set; } = "default";
+
     private HubConnection? hubConnection;
     private List<string> messages = new List<string>();
     private string? userInput;
@@ -39,6 +48,13 @@
             .WithUrl(NavigationManager.ToAbsoluteUri("/chathub"))
             .Build();
 
+        hubConnection.On<string>("Notify", (message) =>
+        {
+            var encodedMsg = $"{message}";
+            messages.Add(encodedMsg);
+            InvokeAsync(StateHasChanged);
+        });
+
         hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
         {
             var encodedMsg = $"{user}: {message}";
@@ -47,14 +63,26 @@
         });
 
         await hubConnection.StartAsync();
+        
+        await hubConnection.InvokeAsync("Enter", Group);
     }
 
-        private async Task Send()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        
+    }
+
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        return base.SetParametersAsync(parameters);
+    }
+
+    private async Task Send()
     {
         if (hubConnection is not null)
-            {
-                await hubConnection.SendAsync("SendMessage", userInput, messageInput);
-            }
+        {
+            await hubConnection.SendAsync("SendMessage", userInput, messageInput);
+        }
     }
 
     public bool IsConnected =>

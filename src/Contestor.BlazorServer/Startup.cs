@@ -8,6 +8,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Contestor.BlazorServer.Hubs;
 using System.Linq;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Contestor.BlazorServer
 {
@@ -25,6 +27,14 @@ namespace Contestor.BlazorServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(new AppConfig { ApiUrl = Configuration["ApiUrl"] });
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options => options.LoginPath = "/account/login");
+            services.AddAuthorization();
+
+            services.AddSignalR();
+
+            services.AddSingleton<IUserIdProvider, CustomUserIdProvider>(); // ”станавливаем сервис дл€ получени€ Id пользовател€
 
             services.AddMapper();
             services.AddUser(Configuration);

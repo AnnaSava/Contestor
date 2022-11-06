@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Contestor.Proto.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,8 @@ namespace Contestor.Proto
         Task<long> Register(RegisterViewModel model);
 
         Task<int> Login(LoginViewModel model);
+
+        Task<UserModel> Auth(LoginViewModel model);
 
         Task Logout();
      }

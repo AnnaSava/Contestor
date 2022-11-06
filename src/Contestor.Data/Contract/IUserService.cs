@@ -8,6 +8,8 @@ namespace Contestor.Proto.Data
 
         Task<int> Login(string userName, string password);
 
+        Task<UserModel> Auth(string userName, string password);
+
         Task Logout();
     }
 }

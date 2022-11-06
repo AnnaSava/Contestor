@@ -39,6 +39,13 @@ namespace Contestor.Proto.Data.Services
             return result.Succeeded ? 0 : -1;
         }
 
+        public async Task<UserModel> Auth(string userName, string password)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
+            return result.Succeeded ? _mapper.Map<UserModel>(user) : null;
+        }
+
         public async Task Logout()
         {
             await _signInManager.SignOutAsync();

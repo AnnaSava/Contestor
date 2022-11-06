@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Contestor.Proto;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -35,6 +38,22 @@ namespace Contestor.BlazorServer.Pages.Account
                     ModelState.AddModelError("", "Ошибка входа: неверный логин или пароль");
                     return Page();
                 }
+
+                //var user = await _userService.Auth(Input);
+                //if (user == null)
+                //{
+                //    ModelState.AddModelError("", "Ошибка входа: неверный логин или пароль");
+                //    return Page();
+                //}
+
+                //var claims = new List<Claim>
+                //{
+                //    new Claim(ClaimTypes.Name, user.UserName)
+                //};
+                //var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                //var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                //await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, new AuthenticationProperties());
+
                 return Redirect("~/");
                 //if (result.Succeeded)
                 //{
