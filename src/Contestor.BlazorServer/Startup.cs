@@ -10,6 +10,7 @@ using Contestor.BlazorServer.Hubs;
 using System.Linq;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System;
 
 namespace Contestor.BlazorServer
 {
@@ -28,17 +29,13 @@ namespace Contestor.BlazorServer
         {
             services.AddSingleton(new AppConfig { ApiUrl = Configuration["ApiUrl"] });
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options => options.LoginPath = "/account/login");
-            services.AddAuthorization();
-
-            services.AddSignalR();
-
-            services.AddSingleton<IUserIdProvider, CustomUserIdProvider>(); // ”станавливаем сервис дл€ получени€ Id пользовател€
+            //services.AddSingleton<IUserIdProvider, CustomUserIdProvider>(); // ”станавливаем сервис дл€ получени€ Id пользовател€
 
             services.AddMapper();
             services.AddUser(Configuration);
             services.AddContestor(Configuration);
+
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
@@ -48,6 +45,26 @@ namespace Contestor.BlazorServer
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
                     new[] { "application/octet-stream" });
             });
+
+            //services.AddAuthentication(opt =>
+            //{
+            //    opt.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            //    opt.RequireAuthenticatedSignIn = false;
+            //})
+            //    .AddCookie(options =>
+            //    {
+            //        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+            //        options.SlidingExpiration = true;
+            //        options.AccessDeniedPath = "/Forbidden/";
+            //    });
+            //.AddCookie(options => {
+            //    options.Cookie.Path = "/";
+            //    options.Cookie.Name = "Cookie";
+            //    });
+            //services.AddAuthorization();
+
+            services.AddSignalR();
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

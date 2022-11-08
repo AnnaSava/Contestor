@@ -7,130 +7,138 @@
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
 @inject NavigationManager NavigationManager
 
-<Chat></Chat>
+<AuthorizeView>
+    <Authorized>Authorized</Authorized>
+    <NotAuthorized>NotAuthorized</NotAuthorized>
+</AuthorizeView>
 
-<h3>Конкурсы на голосовании</h3>
-@if (VotingContestsList is null)
-{
-    <p><em>Загрузка...</em></p>
-}
-else
-{
-    <table class="table">
-        @foreach (var contest in VotingContestsList)
+<div class="row">
+    <div class="col-lg-8">
+        <h3>Конкурсы на голосовании</h3>
+        @if (VotingContestsList is null)
         {
-        <tr>
-            <td>@contest.Title</td>
-            <td>
-                <AuthorizeView>
-                    <Authorized>
-                        <a class="nav-link" href="/contest/@contest.Id/vote">
-                            <span class="oi oi-pencil" aria-hidden="true">Голосовать</span>
-                        </a>
-                    </Authorized>
-                </AuthorizeView>
-            </td>
-            <td>@if (contest.CurStageEndDate.HasValue)
-            {<text>до @contest.CurStageEndDate.Value.ToString("HH:mm dd.MM.yy")</text>}</td>
-        </tr>
+            <p><em>Загрузка...</em></p>
         }
-    </table>
-
-    <a class="nav-link" href="/voting">
-        <span class="oi oi-pencil" aria-hidden="true">Все голосования</span>
-    </a>
-}
-
-<h3>Актуальные конкурсы</h3>
-
-@if (ContestsList is null)
-{
-    <p><em>Загрузка...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>ProcessName</th>
-                <th>Status</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var contest in ContestsList)
-            {
-            <tr>
-                <td>@contest.Id</td>
-                <td>
-                    <a class="nav-link" href="/contest/@contest.Id">
-                        <span aria-hidden="true">@contest.Title</span>
-                    </a>
-                </td>
-                <td>@contest.Description</td>
-                <td>@contest.ProcessName</td>
-                <td>@contest.Status</td>
-                <td>@if (contest.CurStageEndDate.HasValue)
-                {<text>до @contest.CurStageEndDate.Value.ToString("HH:mm dd.MM.yy")</text>}</td>
-                <td>
-                    <AuthorizeView>
-                        <Authorized>
-                            @if (contest.Status == "regopen")
-                            {
-                                @if (contest.VisitorIsParticipant)
-                                {
-
-
-                                    <span>Вы участвуете</span>
-                                }
-                                else
-                                {
-                                    <a class="nav-link" href="/contest/@contest.Id">
-                                        <span class="oi oi-pencil" aria-hidden="true">Принять участие</span>
-                                    </a>
-                                }
-                            }
-                            else if (contest.Status == "open")
-                            {
-                                @if (contest.VisitorWorksCount < contest.MaxWorksCount)
-                                {
-                                    <a class="nav-link" href="/contest/@contest.Id/sendwork">
-                                        <span class="oi oi-pencil" aria-hidden="true">Прислать работу</span>
-                                    </a>
-                                }
-                                else
-                                {
-                                    <span>Вы уже прислали допустимое количество работ</span>
-                                }
-                            }
-                        </Authorized>
-                        <NotAuthorized>
-                            @if (contest.Status == "regopen")
-                            {
-                                <a class="nav-link" href="/Account/Register?contestId=@contest.Id">
-                                    <span class="oi oi-pencil" aria-hidden="true">Принять участие</span>
+        else
+        {
+            <table class="table">
+                @foreach (var contest in VotingContestsList)
+                {
+                <tr>
+                    <td>@contest.Title</td>
+                    <td>
+                        <AuthorizeView>
+                            <Authorized>
+                                <a class="nav-link" href="/contest/@contest.Id/vote">
+                                    <span class="oi oi-pencil" aria-hidden="true">Голосовать</span>
                                 </a>
-                            }
-                            else if (contest.Status == "open" && contest.AutoRegEnabled)
-                            {
-                                <a class="nav-link" href="/Account/Register?contestId=@contest.Id&sendwork=@true">
-                                    <span class="oi oi-pencil" aria-hidden="true">Прислать работу</span>
-                                </a>
-                            }
-                        </NotAuthorized>
-                    </AuthorizeView>
-                </td>
-            </tr>
-            }
-        </tbody>
-    </table>
-}
+                            </Authorized>
+                        </AuthorizeView>
+                    </td>
+                    <td>@if (contest.CurStageEndDate.HasValue)
+                    {<text>до @contest.CurStageEndDate.Value.ToString("HH:mm dd.MM.yy")</text>}</td>
+                </tr>
+                }
+            </table>
+
+            <a class="nav-link" href="/voting">
+                <span class="oi oi-pencil" aria-hidden="true">Все голосования</span>
+            </a>
+        }
+
+        <h3>Актуальные конкурсы</h3>
+
+        @if (ContestsList is null)
+        {
+            <p><em>Загрузка...</em></p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>ProcessName</th>
+                        <th>Status</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var contest in ContestsList)
+                    {
+                    <tr>
+                        <td>@contest.Id</td>
+                        <td>
+                            <a class="nav-link" href="/contest/@contest.Id">
+                                <span aria-hidden="true">@contest.Title</span>
+                            </a>
+                        </td>
+                        <td>@contest.Description</td>
+                        <td>@contest.ProcessName</td>
+                        <td>@contest.Status</td>
+                        <td>@if (contest.CurStageEndDate.HasValue)
+                        {<text>до @contest.CurStageEndDate.Value.ToString("HH:mm dd.MM.yy")</text>}</td>
+                        <td>
+                            <AuthorizeView>
+                                <Authorized>
+                                    @if (contest.Status == "regopen")
+                                    {
+                                        @if (contest.VisitorIsParticipant)
+                                        {
+
+
+                                            <span>Вы участвуете</span>
+                                        }
+                                        else
+                                        {
+                                            <a class="nav-link" href="/contest/@contest.Id">
+                                                <span class="oi oi-pencil" aria-hidden="true">Принять участие</span>
+                                            </a>
+                                        }
+                                    }
+                                    else if (contest.Status == "open")
+                                    {
+                                        @if (contest.VisitorWorksCount < contest.MaxWorksCount)
+                                        {
+                                            <a class="nav-link" href="/contest/@contest.Id/sendwork">
+                                                <span class="oi oi-pencil" aria-hidden="true">Прислать работу</span>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span>Вы уже прислали допустимое количество работ</span>
+                                        }
+                                    }
+                                </Authorized>
+                                <NotAuthorized>
+                                    @if (contest.Status == "regopen")
+                                    {
+                                        <a class="nav-link" href="/Account/Register?contestId=@contest.Id">
+                                            <span class="oi oi-pencil" aria-hidden="true">Принять участие</span>
+                                        </a>
+                                    }
+                                    else if (contest.Status == "open" && contest.AutoRegEnabled)
+                                    {
+                                        <a class="nav-link" href="/Account/Register?contestId=@contest.Id&sendwork=@true">
+                                            <span class="oi oi-pencil" aria-hidden="true">Прислать работу</span>
+                                        </a>
+                                    }
+                                </NotAuthorized>
+                            </AuthorizeView>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        </div>
+    <div class="col-lg-4"><Chat></Chat></div>
+</div>
 
 @code {
     string UserName = string.Empty;

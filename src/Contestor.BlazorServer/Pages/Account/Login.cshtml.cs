@@ -46,15 +46,16 @@ namespace Contestor.BlazorServer.Pages.Account
                 //    return Page();
                 //}
 
-                //var claims = new List<Claim>
+                //IEnumerable<Claim> claims = new List<Claim>
                 //{
-                //    new Claim(ClaimTypes.Name, user.UserName)
+                //    new Claim(ClaimTypes.NameIdentifier, user.UserName)
                 //};
                 //var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 //var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                 //await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, new AuthenticationProperties());
 
                 return Redirect("~/");
+
                 //if (result.Succeeded)
                 //{
                 //    // проверяем, принадлежит ли URL приложению

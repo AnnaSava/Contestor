@@ -5,6 +5,7 @@ using Contestor.Proto.Data;
 using Contestor.Proto.Data.Entities;
 using Contestor.Proto.Data.Services;
 using Contestor.Proto.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -66,6 +67,19 @@ namespace Contestor.Proto
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<ContestContext>()
                 .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.Cookie.Name = "YourAppCookieName";
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                options.LoginPath = "/Identity/Account/Login";
+                // ReturnUrlParameter requires 
+                //using Microsoft.AspNetCore.Authentication.Cookies;
+                options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
+                options.SlidingExpiration = true;
+            });
 
             services.AddScoped<IUserService>(s => new UserService(
                 s.GetService<UserManager<User>>(),

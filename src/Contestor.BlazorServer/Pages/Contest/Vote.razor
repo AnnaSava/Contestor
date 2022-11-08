@@ -2,56 +2,65 @@
 @using Contestor.Proto.Data
 @using Contestor.Proto
 @using System.Security.Claims
+@using Microsoft.AspNetCore.SignalR.Client
 @inject IContestViewService contestService
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider authProvider
 
-<h3>@Contest.Title - голосование</h3>
-
-@if (Works is null)
-{
-    <p><em>Загрузка... !</em></p>
-}
-else
-{
-    <table class="table">
-        @foreach (var work in Works)
+<div class="row">
+    <div class="col-lg-7">
+        <h3>@Contest.Title - голосование</h3>
+        @if (Works is null)
         {
-            <tr>
-                <td>@work.Title</td>
-                <td>
-                    @if (!string.IsNullOrEmpty(work.Content) && work.Content.Contains(".jpg"))
-                    {
-                        <div>
-                            <img src="@work.Content" style="height:150px" />
-                        </div>
-                    }
-                </td>
-                <td>
-                    <AuthorizeView>
-                        <Authorized>
-                            @if (work.VisitorIsAuthor)
-                            {
-                                <span>Вы автор этой работы</span>
-                            }
-                            else if (work.VisitorHasVoted)
-                            {
-                                <span>Вы уже проголосовали</span>
-                            }
-                            else
-                            {
-                                <input type="button" class="btn btn-primary" @onclick="() => VoteForWork(work)" value="Проголосовать" />
-                            }
-                        </Authorized>
-                        <NotAuthorized>
-                            <span>Войдите, чтобы проголосовать</span>
-                        </NotAuthorized>
-                    </AuthorizeView>
-                </td>
-            </tr>
+            <p><em>Загрузка... !</em></p>
         }
-    </table>
-}
+        else
+        {
+            <table class="table">
+                @foreach (var work in Works)
+                {
+                    <tr>
+                        <td>@work.Title</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(work.Content) && work.Content.Contains(".jpg"))
+                            {
+                                <div>
+                                    <img src="@work.Content" style="height:150px" />
+                                </div>
+                            }
+                        </td>
+                        <td>
+                            <AuthorizeView>
+                                <Authorized>
+                                    @if (work.VisitorIsAuthor)
+                                    {
+                                        <span>Вы автор этой работы</span>
+                                    }
+                                    else if (work.VisitorHasVoted)
+                                    {
+                                        <span>Вы уже проголосовали</span>
+                                    }
+                                    else
+                                    {
+                                        <input type="button" class="btn btn-primary" @onclick="() => VoteForWork(work)" value="Проголосовать" />
+                                    }
+                                </Authorized>
+                                <NotAuthorized>
+                                    <span>Войдите, чтобы проголосовать</span>
+                                </NotAuthorized>
+                            </AuthorizeView>
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+    </div>
+    <div class="col-lg-5">
+        <Chat Group="@("contest" + Id)"></Chat>
+    </div>
+</div>
+
+
 
 
 @code {
@@ -63,8 +72,16 @@ else
 
     public long UserId = 0;
 
+    private HubConnection? hubConnection;
+
     protected override async Task OnInitializedAsync()
     {
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/chathub"))
+            .Build();
+
+        await hubConnection.StartAsync();
+
         var authstate = await authProvider.GetAuthenticationStateAsync();
         var user = authstate.User;
 
@@ -86,6 +103,14 @@ else
             await contestService.Vote(UserId, work.Id);
 
             work.VisitorHasVoted = true;
+
+            if (hubConnection is not null)
+        {
+            var authstate = await authProvider.GetAuthenticationStateAsync();
+            var user = authstate.User;
+
+            await hubConnection.SendAsync("SendMessage", user.Claims.FirstOrDefault(m=>m.Type == ClaimTypes.NameIdentifier).Value, "пользователь проголосовал в конкурсе");
+        }
             StateHasChanged();
         }
     }
